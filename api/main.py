@@ -9,7 +9,8 @@ from api import models, utils
 
 app = FastAPI()
 
-client = MongoClient(host="172.17.0.2")
+# client = MongoClient(host="172.17.0.2")
+client = MongoClient(host="db")
 db = client["database"]
 twitter_col = db["twitter"]
 facebook_col = db["facebook"]
