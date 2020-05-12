@@ -13,7 +13,7 @@ USER appuser
 RUN mkdir app
 WORKDIR /home/appuser/app
 
-COPY api/ ./api/
+COPY receiver/ ./receiver/
 
 COPY main.py . 
 
