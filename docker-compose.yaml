@@ -4,12 +4,17 @@ services:
     build: ./receiver
     depends_on:
       - db
-    restart: always
+    # restart: always
   db:
     image: mongo:4.2.6
-    restart: always
+    logging:
+      driver: none
+    # restart: always
   api:
     build: ./api
     depends_on:
+      - receiver
       - db
-    restart: always
+    ports:
+      - '8000:8000'
+    # restart: always
