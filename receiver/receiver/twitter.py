@@ -1,20 +1,9 @@
-import asyncio
-import json
-from urllib.parse import urlparse
-
-from pymongo import MongoClient
 import aiohttp
 
 from receiver import utils
 
 
-async def get_twitter():
-    async with aiohttp.ClientSession() as session:
-        hashtags = await get_hashtags(session)
-    return hashtags
-
-
-async def get_hashtags(session):
+async def get_data():
     endpoints = [
         "hashtags.json",
         "CSU.json",
@@ -25,30 +14,34 @@ async def get_hashtags(session):
         "Gruenen.json",
         "Linke.json",
     ]
+
     base_url = "https://political-dashboard.com/json_files/"
-    urls = [base_url + endpoint for endpoint in endpoints]
-    hashtags = await utils.fetch_multiple(session, urls, fetch_hashtags)
-    return hashtags
+
+    async with aiohttp.ClientSession() as session:
+        data = await utils.get_data_from_endpoints(session, endpoints, base_url, fetch)
+    return data
 
 
-async def fetch_hashtags(session, url):
-    parsed_url = urlparse(url)
-    filename = parsed_url.path.split("/")[-1].split(".")[0]
+async def fetch(session, url):
+    async with session.get(url) as response:
+        data = await response.json()
+
+    filename = utils.get_filename_from_url(url)
     if filename == "hashtags":
         party = None
     else:
         party = filename
-    async with session.get(url) as response:
-        data = await response.json()
-        transformed_data = await transform_hashtags_json(data, party)
+    transformed_data = await transform(data, party)
     return transformed_data
 
 
-async def transform_hashtags_json(data, party):
+async def transform(data, party):
     data_type = "hashtags"
-    transformed_data = {
-        "data_type": data_type,
-        "party": party,
-        "items": data["chart"],
-    }
+    if party == None:
+        transformed_data = {
+            "data_type": data_type,
+            "items": data["chart"],
+        }
+    else:
+        transformed_data["party"] = party
     return transformed_data
