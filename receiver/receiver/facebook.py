@@ -1,9 +1,7 @@
-import aiohttp
-
 from receiver import utils
 
 
-async def get_data():
+async def get_data(session):
     endpoints = [
         "counter_ads.json",
         "fb_spiderplot.json",
@@ -15,8 +13,7 @@ async def get_data():
 
     base_url = "https://political-dashboard.com/json_files/"
 
-    async with aiohttp.ClientSession() as session:
-        data = await utils.get_data_from_endpoints(session, endpoints, base_url, fetch)
+    data = await utils.get_data_from_endpoints(session, endpoints, base_url, fetch)
     return data
 
 

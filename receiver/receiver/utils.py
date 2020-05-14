@@ -16,7 +16,7 @@ def load_data_into_db(directory, collection):
     collection.insert_many(data_list)
 
 
-def get_filename_from_url(url):
+async def get_filename_from_url(url):
     parsed_url = urlparse(url)
     filename = parsed_url.path.split("/")[-1].split(".")[0]
     return filename
@@ -29,10 +29,8 @@ async def get_data_from_endpoints(session, endpoints, base_url, fetch_function):
 
 
 async def fetch_multiple(session, urls, fetch_function):
-    results = await asyncio.gather(
-        *[fetch_function(session, url) for url in urls], return_exceptions=True
-    )
-    return [result for result in results if not isinstance(result, Exception)]
+    results = await asyncio.gather(*[fetch_function(session, url) for url in urls])
+    return results
 
 
 async def fetch(session, url):
