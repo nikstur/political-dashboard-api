@@ -29,6 +29,7 @@ twitter_col, facebook_col, media_col = setup_db("172.17.0.2")
     "/twitter",
     response_model=List[models.TwitterHashtagResponse],
     response_model_exclude_unset=True,
+    tags=["twitter"],
 )
 async def twitter():
     return await utils.get_cleaned_docs(twitter_col)
@@ -38,6 +39,7 @@ async def twitter():
     "/twitter/hashtags",
     response_model=List[models.TwitterHashtagResponse],
     response_model_exclude_unset=True,
+    tags=["twitter"],
 )
 async def twitter_hashtags(
     party: str = Query(None, description="Abbreviated name of party", min_length=3)
@@ -63,37 +65,60 @@ async def twitter_hashtags(
             models.FacebookAdsResponse,
         ]
     ],
+    tags=["facebook"],
 )
 async def facebook():
     return await utils.get_cleaned_docs(facebook_col)
 
 
-@app.get("/facebook/posts", response_model=List[models.SimpleFacebookResponse])
+@app.get(
+    "/facebook/posts",
+    response_model=List[models.SimpleFacebookResponse],
+    tags=["facebook"],
+)
 async def facebook_posts():
     return await utils.get_cleaned_docs(facebook_col, {"data_type": "posts"})
 
 
-@app.get("/facebook/shares", response_model=List[models.SimpleFacebookResponse])
+@app.get(
+    "/facebook/shares",
+    response_model=List[models.SimpleFacebookResponse],
+    tags=["facebook"],
+)
 async def facebook_shares():
     return await utils.get_cleaned_docs(facebook_col, {"data_type": "shares"})
 
 
-@app.get("/facebook/likes", response_model=List[models.SimpleFacebookResponse])
+@app.get(
+    "/facebook/likes",
+    response_model=List[models.SimpleFacebookResponse],
+    tags=["facebook"],
+)
 async def facebook_likes():
     return await utils.get_cleaned_docs(facebook_col, {"data_type": "likes"})
 
 
-@app.get("/facebook/reactions", response_model=List[models.FacebookReactionsReponse])
+@app.get(
+    "/facebook/reactions",
+    response_model=List[models.FacebookReactionsReponse],
+    tags=["facebook"],
+)
 async def facebook_reactions():
     return await utils.get_cleaned_docs(facebook_col, {"data_type": "reactions"})
 
 
-@app.get("/facebook/sentiment", response_model=List[models.FacebookSentimentResponse])
+@app.get(
+    "/facebook/sentiment",
+    response_model=List[models.FacebookSentimentResponse],
+    tags=["facebook"],
+)
 async def facebook_sentiment():
     return await utils.get_cleaned_docs(facebook_col, {"data_type": "sentiment"})
 
 
-@app.get("/facebook/ads", response_model=List[models.FacebookAdsResponse])
+@app.get(
+    "/facebook/ads", response_model=List[models.FacebookAdsResponse], tags=["facebook"]
+)
 async def facebook_ads():
     return await utils.get_cleaned_docs(facebook_col, {"data_type": "ads"})
 
@@ -106,12 +131,17 @@ async def facebook_ads():
     response_model=List[
         Union[models.MediaAttentionResponse, models.MediaTopicyByMediaSourceResponse,]
     ],
+    tags=["media"],
 )
 async def media():
     return await utils.get_cleaned_docs(media_col)
 
 
-@app.get("/media/attention", response_model=List[models.MediaAttentionResponse])
+@app.get(
+    "/media/attention",
+    response_model=List[models.MediaAttentionResponse],
+    tags=["media"],
+)
 async def media_attention():
     return await utils.get_cleaned_docs(media_col, {"data_type": "attention"})
 
@@ -119,6 +149,7 @@ async def media_attention():
 @app.get(
     "/media/topics_by_media_source",
     response_model=List[models.MediaTopicyByMediaSourceResponse],
+    tags=["media"],
 )
 async def media_topics_by_media_source():
     return await utils.get_cleaned_docs(
