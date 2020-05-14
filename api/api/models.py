@@ -5,15 +5,6 @@ from pydantic import BaseModel
 # Twitter
 
 
-class TwitterURLResponseBody(BaseModel):
-    text: str
-
-
-class TwitterURLResponse(BaseModel):
-    data_type: str = "url"
-    items: List[TwitterURLResponseBody]
-
-
 class TwitterHashtagResponseBody(BaseModel):
     biased: int
     count: int
@@ -42,7 +33,7 @@ class SimpleFacebookResponse(BaseModel):
     items: List[SimpleFacebookResponseBody]
 
 
-class FacebookReactionsBody(BaseModel):
+class FacebookReactionsReponseBody(BaseModel):
     text: str
     AfD: float
     CDU: float
@@ -55,19 +46,48 @@ class FacebookReactionsBody(BaseModel):
 
 class FacebookReactionsReponse(BaseModel):
     data_type: str = "reactions"
-    items: List[FacebookReactionsBody]
+    items: List[FacebookReactionsReponseBody]
 
 
-class FacebookSentimentBody(BaseModel):
+class FacebookSentimentResponseBody(BaseModel):
     text: str
     posts: float
 
 
 class FacebookSentimentResponse(BaseModel):
     data_type: str = "sentiment"
-    items: List[FacebookSentimentBody]
+    items: List[FacebookSentimentResponseBody]
 
 
 class FacebookAdsResponse(BaseModel):
     data_type: str = "ads"
     count: int
+
+
+# Media
+
+
+class MediaAttentionResponseBody(BaseModel):
+    text: str
+    count: int
+    biased: int
+    hours: int
+
+
+class MediaAttentionResponse(BaseModel):
+    data_type: str = "attention"
+    items: List[MediaAttentionResponseBody]
+
+
+class MediaTopicyByMediaSourceResponseBody(BaseModel):
+    text: str
+    C: float
+    L: float
+    R: float
+    CL: float
+    CR: float
+
+
+class MediaTopicyByMediaSourceResponse(BaseModel):
+    data_type: str = "topics_by_media_source"
+    items: List[MediaTopicyByMediaSourceResponseBody]
