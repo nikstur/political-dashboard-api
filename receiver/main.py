@@ -1,9 +1,9 @@
 import asyncio
 
-from motor.motor_asyncio import AsyncIOMotorClient
 import aiohttp
+from motor.motor_asyncio import AsyncIOMotorClient
 
-from receiver import twitter, facebook, media
+from receiver import facebook, media, twitter
 
 
 def setup_db(host_name, drop_all=False):
