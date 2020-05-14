@@ -1,12 +1,14 @@
 import asyncio
 
 from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import MongoClient
 import aiohttp
 
 from receiver import twitter, facebook, media
 
 client = AsyncIOMotorClient(host="172.17.0.2")
 # client = AsyncIOMotorClient(host="db")
+# client = MongoClient(host="172.17.0.2")
 db = client["database"]
 
 db.drop_collection("twitter")
@@ -19,16 +21,15 @@ db.drop_collection("media")
 media_col = db["media"]
 
 
-async def get_and_store(session, collection, module):
-    results = await module.get_data(session)
-    await collection.insert_many(results)
-
-
 async def main():
-    collections = [(twitter, twitter_col), (facebook, facebook_col), (media, media_col)]
     async with aiohttp.ClientSession() as session:
-        for module, collection in collections:
-            asyncio.create_task(get_and_store(session, collection, module))
+        twitter_results = await twitter.get_data(session)
+        facebook_results = await facebook.get_data(session)
+        media_results = await media.get_data(session)
+
+    twitter_col.insert_many(twitter_results)
+    facebook_col.insert_many(facebook_results)
+    # await media_col.insert_many(media_results)
 
 
 if __name__ == "__main__":

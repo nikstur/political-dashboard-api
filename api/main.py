@@ -2,6 +2,8 @@ import json
 from typing import List, Union
 
 from fastapi import FastAPI, Query
+
+# from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
 
 from api import models, utils
@@ -9,8 +11,8 @@ from api import models, utils
 
 app = FastAPI()
 
-# client = MongoClient(host="172.17.0.2")
-client = MongoClient(host="db")
+client = MongoClient(host="172.17.0.2")
+# client = MongoClient(host="db")
 db = client["database"]
 twitter_col = db["twitter"]
 facebook_col = db["facebook"]
@@ -100,3 +102,9 @@ async def facebook_ads():
 @app.get("/media")
 async def media():
     return {"message": "Not yet implemented"}
+
+
+from pprint import pprint
+
+for doc in twitter_col.find():
+    pprint(doc)

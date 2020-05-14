@@ -21,7 +21,7 @@ async def fetch(session, url):
     async with session.get(url) as response:
         data = await response.json()
 
-    filename = utils.get_filename_from_url(url)
+    filename = await utils.get_filename_from_url(url)
     if filename == "counter_ads":
         data_type = "ads"
         transformed_data = await transform_counter(data, data_type)

@@ -3,7 +3,7 @@ from receiver import utils
 
 async def get_data(session):
     endpoints = [
-        "topics_news.json",
+        # "topics_news.json",
         "news_party_attention.json",
         "spiderplot_news.json",
     ]
