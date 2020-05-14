@@ -29,7 +29,7 @@ async def main():
 
     twitter_col.insert_many(twitter_results)
     facebook_col.insert_many(facebook_results)
-    # await media_col.insert_many(media_results)
+    media_col.insert_many(media_results)
 
 
 if __name__ == "__main__":
