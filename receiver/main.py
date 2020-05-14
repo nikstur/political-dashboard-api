@@ -1,27 +1,25 @@
 import asyncio
 
 from motor.motor_asyncio import AsyncIOMotorClient
-from pymongo import MongoClient
 import aiohttp
 
 from receiver import twitter, facebook, media
 
-client = AsyncIOMotorClient(host="172.17.0.2")
-# client = AsyncIOMotorClient(host="db")
-# client = MongoClient(host="172.17.0.2")
-db = client["database"]
 
-db.drop_collection("twitter")
-twitter_col = db["twitter"]
-
-db.drop_collection("facebook")
-facebook_col = db["facebook"]
-
-db.drop_collection("media")
-media_col = db["media"]
+def setup_db(host_name, drop_all=False):
+    client = AsyncIOMotorClient(host=host_name)
+    db = client["database"]
+    if drop_all:
+        client.drop_database("database")
+    twitter_col = db["twitter"]
+    facebook_col = db["facebook"]
+    media_col = db["media"]
+    return twitter_col, facebook_col, media_col
 
 
 async def main():
+    twitter_col, facebook_col, media_col = setup_db("172.17.0.2", drop_all=True)
+
     async with aiohttp.ClientSession() as session:
         twitter_results = await twitter.get_data(session)
         facebook_results = await facebook.get_data(session)

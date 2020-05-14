@@ -7,18 +7,29 @@ from api import models, utils
 
 app = FastAPI()
 
-client = AsyncIOMotorClient(host="172.17.0.2")
-# client = AsyncIOMotorClient(host="db")
-db = client["database"]
-twitter_col = db["twitter"]
-facebook_col = db["facebook"]
-media_col = db["media"]
+
+def setup_db(host_name, drop_all=False):
+    client = AsyncIOMotorClient(host=host_name)
+    db = client["database"]
+    if drop_all:
+        client.drop_database("database")
+    twitter_col = db["twitter"]
+    facebook_col = db["facebook"]
+    media_col = db["media"]
+    return twitter_col, facebook_col, media_col
+
+
+twitter_col, facebook_col, media_col = setup_db("172.17.0.2")
 
 
 # Twitter
 
 
-@app.get("/twitter", response_model=List[models.TwitterHashtagResponse])
+@app.get(
+    "/twitter",
+    response_model=List[models.TwitterHashtagResponse],
+    response_model_exclude_unset=True,
+)
 async def twitter():
     return await utils.get_cleaned_docs(twitter_col)
 
