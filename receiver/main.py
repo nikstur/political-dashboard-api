@@ -1,29 +1,34 @@
 import asyncio
-import json
-from pathlib import Path
-from pprint import pprint
-from urllib.parse import urlparse
 
+from motor.motor_asyncio import AsyncIOMotorClient
 import aiohttp
-from pymongo import MongoClient
 
-from receiver import twitter, facebook, utils
+from receiver import twitter, facebook, media
 
-# client = MongoClient(host="172.17.0.2")
-client = MongoClient(host="db")
+client = AsyncIOMotorClient(host="172.17.0.2")
+# client = AsyncIOMotorClient(host="db")
 db = client["database"]
+
 db.drop_collection("twitter")
 twitter_col = db["twitter"]
+
 db.drop_collection("facebook")
 facebook_col = db["facebook"]
 
+db.drop_collection("media")
+media_col = db["media"]
+
+
+async def get_and_store(session, collection, module):
+    results = await module.get_data(session)
+    await collection.insert_many(results)
+
 
 async def main():
-    twitter_results = await twitter.get_data()
-    twitter_col.insert_many(twitter_results)
-
-    facebook_results = await facebook.get_data()
-    facebook_col.insert_many(facebook_results)
+    collections = [(twitter, twitter_col), (facebook, facebook_col), (media, media_col)]
+    async with aiohttp.ClientSession() as session:
+        for module, collection in collections:
+            asyncio.create_task(get_and_store(session, collection, module))
 
 
 if __name__ == "__main__":
