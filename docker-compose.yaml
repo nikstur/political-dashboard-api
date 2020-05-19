@@ -12,6 +12,8 @@ services:
     # restart: always
   api:
     build: ./api
+    environment:
+      - DB_HOSTNAME=db
     depends_on:
       - receiver
       - db
