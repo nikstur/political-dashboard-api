@@ -14,11 +14,6 @@ RUN useradd --create-home appuser
 WORKDIR /home/appuser/
 USER appuser
 
-RUN mkdir app
-WORKDIR /home/appuser/app
-
-COPY api/ ./api/
-
-COPY main.py . 
+COPY app/ app/
 
 ENTRYPOINT [ "/entrypoint.sh" ]
