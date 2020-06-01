@@ -6,7 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from . import facebook, media, twitter, database
 
 
-async def main():
+async def main() -> None:
     twitter_col, facebook_col, media_col = database.setup(drop_all=True)
 
     async with aiohttp.ClientSession() as session:

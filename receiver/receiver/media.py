@@ -1,7 +1,11 @@
+from typing import Dict, List
+
+from aiohttp import ClientSession
+
 from receiver import utils
 
 
-async def get_data(session):
+async def get_data(session: ClientSession) -> List[Dict]:
     endpoints = [
         # "topics_news.json",
         "news_party_attention.json",
@@ -14,9 +18,9 @@ async def get_data(session):
     return data
 
 
-async def fetch(session, url):
+async def fetch(session: ClientSession, url: str) -> Dict:
     async with session.get(url) as response:
-        data = await response.json()
+        data = await response.json(content_type=None)
 
     filename = await utils.get_filename_from_url(url)
     if filename == "topics_news":
@@ -29,7 +33,7 @@ async def fetch(session, url):
     return transformed_data
 
 
-async def transform(data, data_type):
+async def transform(data: Dict, data_type: str) -> Dict:
     transformed_data = {"data_type": data_type}
     if data_type == "topics":
         transformed_data["items"] = data["children"]
