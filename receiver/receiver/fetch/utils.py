@@ -1,8 +1,8 @@
-import json
 import asyncio
+import json
 from pathlib import Path
+from typing import Callable, Dict, List
 from urllib.parse import urlparse
-from typing import List, Callable, Dict
 
 import aiohttp
 from aiohttp import ClientSession
@@ -41,9 +41,3 @@ async def fetch_multiple(
 ) -> List[Dict]:
     results = await asyncio.gather(*[fetch_function(session, url) for url in urls])
     return results
-
-
-async def fetch(session: ClientSession, url: str) -> Dict:
-    async with session.get(url) as response:
-        data = await response.json()
-    return data

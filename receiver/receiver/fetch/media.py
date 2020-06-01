@@ -2,10 +2,11 @@ from typing import Dict, List
 
 from aiohttp import ClientSession
 
-from receiver import utils
+from . import utils
+from .preprocess import media as preprocess
 
 
-async def get_data(session: ClientSession) -> List[Dict]:
+async def media(session: ClientSession) -> List[Dict]:
     endpoints = [
         # "topics_news.json",
         "news_party_attention.json",
@@ -14,11 +15,13 @@ async def get_data(session: ClientSession) -> List[Dict]:
 
     base_url = "https://political-dashboard.com/json_files/"
 
-    data = await utils.get_data_from_endpoints(session, endpoints, base_url, fetch)
+    data = await utils.get_data_from_endpoints(
+        session, endpoints, base_url, fetch_single
+    )
     return data
 
 
-async def fetch(session: ClientSession, url: str) -> Dict:
+async def fetch_single(session: ClientSession, url: str) -> Dict:
     async with session.get(url) as response:
         data = await response.json(content_type=None)
 
@@ -29,14 +32,5 @@ async def fetch(session: ClientSession, url: str) -> Dict:
         data_type = "attention"
     elif filename == "spiderplot_news":
         data_type = "topics_by_media_source"
-    transformed_data = await transform(data, data_type)
-    return transformed_data
-
-
-async def transform(data: Dict, data_type: str) -> Dict:
-    transformed_data = {"data_type": data_type}
-    if data_type == "topics":
-        transformed_data["items"] = data["children"]
-    else:
-        transformed_data["items"] = data["chart"]
+    transformed_data = preprocess.transform(data, data_type)
     return transformed_data
