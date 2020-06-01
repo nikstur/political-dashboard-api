@@ -1,7 +1,9 @@
-version: '3'
+version: "3"
 services:
   receiver:
     build: ./receiver
+    environment:
+      - DB_HOSTNAME=db
     depends_on:
       - db
     # restart: always
@@ -18,5 +20,5 @@ services:
       - receiver
       - db
     ports:
-      - '8000:8000'
+      - "8000:8000"
     # restart: always

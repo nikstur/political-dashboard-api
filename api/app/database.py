@@ -1,6 +1,8 @@
+import os
+
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from . import config
+db_hostname = os.getenv("DB_HOSTNAME")
 
 
 def create_find_and_clean(collection):
@@ -16,12 +18,12 @@ def create_find_and_clean(collection):
 
 
 def get_collection(collection_name):
-    db = setup_db(config.db_hostname)
+    db = setup()
     return db[collection_name]
 
 
-def setup_db(hostname, drop_all=False):
-    client = AsyncIOMotorClient(host=hostname)
+def setup(drop_all=False):
+    client = AsyncIOMotorClient(host=db_hostname)
     if drop_all:
         client.drop_database("database")
     db = client["database"]
