@@ -1,7 +1,11 @@
+from typing import Dict, List
+
+from aiohttp import ClientSession
+
 from receiver import utils
 
 
-async def get_data(session):
+async def get_data(session: ClientSession) -> List[Dict]:
     endpoints = [
         "counter_ads.json",
         "fb_spiderplot.json",
@@ -17,7 +21,7 @@ async def get_data(session):
     return data
 
 
-async def fetch(session, url):
+async def fetch(session: ClientSession, url: str) -> Dict:
     async with session.get(url) as response:
         data = await response.json()
 
@@ -35,7 +39,7 @@ async def fetch(session, url):
     return transformed_data
 
 
-async def transform_counter(data, data_type):
+async def transform_counter(data: Dict, data_type: str) -> Dict:
     transformed_data = {
         "data_type": data_type,
         "count": data["chart"][0]["1"]["count"],
@@ -43,6 +47,6 @@ async def transform_counter(data, data_type):
     return transformed_data
 
 
-async def transform(data, data_type):
+async def transform(data: Dict, data_type: str) -> Dict:
     transformed_data = {"data_type": data_type, "items": data["chart"]}
     return transformed_data

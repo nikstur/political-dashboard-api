@@ -5,7 +5,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 db_hostname = os.getenv("DB_HOSTNAME")
 
 
-def setup(drop_all=False):
+def setup(drop_all: bool = False):
     client = AsyncIOMotorClient(host=db_hostname)
     db = client["database"]
     if drop_all:

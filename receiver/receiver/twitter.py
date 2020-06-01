@@ -1,7 +1,11 @@
+from typing import List, Dict, Union
+
+from aiohttp import ClientSession
+
 from receiver import utils
 
 
-async def get_data(session):
+async def get_data(session: ClientSession) -> List[Dict]:
     endpoints = [
         "hashtags.json",
         "CSU.json",
@@ -19,7 +23,7 @@ async def get_data(session):
     return data
 
 
-async def fetch(session, url):
+async def fetch(session: ClientSession, url: str) -> Dict:
     async with session.get(url) as response:
         data = await response.json()
 
@@ -32,7 +36,7 @@ async def fetch(session, url):
     return transformed_data
 
 
-async def transform(data, party):
+async def transform(data: Dict, party: Union[str, None]) -> Dict:
     data_type = "hashtags"
     transformed_data = {
         "data_type": data_type,
