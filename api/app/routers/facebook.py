@@ -22,7 +22,9 @@ find_and_clean = database.create_find_and_clean(facebook_col)
     ],
 )
 async def facebook():
-    return await find_and_clean()
+    result = find_and_clean()
+    print(result)
+    return await result
 
 
 @router.get(

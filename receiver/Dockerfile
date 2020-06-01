@@ -6,6 +6,9 @@ RUN chmod +x ./update-packages.sh && ./update-packages.sh
 COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 RUN useradd --create-home appuser
 WORKDIR /home/appuser/
 USER appuser
@@ -15,6 +18,4 @@ WORKDIR /home/appuser/app
 
 COPY receiver/ ./receiver/
 
-COPY main.py . 
-
-CMD ["python", "main.py"]
+ENTRYPOINT [ "/entrypoint.sh" ]
