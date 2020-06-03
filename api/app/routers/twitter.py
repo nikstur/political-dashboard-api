@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List
 
 from fastapi import APIRouter, Query
 
@@ -27,7 +27,7 @@ async def twitter():
 async def twitter_hashtags(
     party: str = Query(None, description="Abbreviated name of party", min_length=3)
 ):
-    if party == None:
+    if not party:
         return await find_and_clean({"data_type": "hashtags"})
     else:
         return await find_and_clean({"data_type": "hashtags", "party": party})

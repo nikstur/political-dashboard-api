@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Dict, Union
 
 
 def transform(data: Dict, party: Union[str, None]) -> Dict:
@@ -7,6 +7,6 @@ def transform(data: Dict, party: Union[str, None]) -> Dict:
         "data_type": data_type,
         "items": data["chart"],
     }
-    if party != None:
+    if party:
         transformed_data["party"] = party
     return transformed_data

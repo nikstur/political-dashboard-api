@@ -1,7 +1,6 @@
 import asyncio
 
 import aiohttp
-from motor.motor_asyncio import AsyncIOMotorClient
 
 from . import database, fetch
 

@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
 
 from .. import database, models
 
