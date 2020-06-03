@@ -1,0 +1,70 @@
+name: Linting & Tests
+
+on: [push, pull_request]
+
+jobs:
+    pre-commit:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - uses: actions/setup-python@v2
+                with:
+                python-version: 3.8
+
+            - name: set PY
+                run: echo "::set-env name=PY::$(python -c 'import hashlib, sys;print(hashlib.sha256(sys.version.encode()+sys.executable.encode()).hexdigest())')"
+
+            - uses: actions/cache@v2
+              with:
+                path: ~/.cache/pre-commit
+                key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+            - uses: pre-commit/action@v1.1.0
+
+    tests:
+        needs: pre-commit
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                services: [receiver/, api/]
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup Python
+              uses: actions/setup-python@v2
+              with:
+                python-version: 3.8
+
+            - name: Get full Python version
+              id: full-python-version
+              shell: bash
+              run: echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
+
+            - name: Install Poetry
+              shell: bash
+              run: |
+                curl -fsS -o get-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
+                python get-poetry.py --preview -y
+                echo "::set-env name=PATH::$HOME/.poetry/bin:$PATH"
+
+            - name: Configure poetry
+              shell: bash
+              run: poetry config virtualenvs.in-project true
+
+            - name: Set up Cache
+              uses: actions/cache@v2
+              id: cache
+              with:
+                path: ${{ matrix.services }}/.venv
+                key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles( matrix.services + 'poetry.lock') }}
+
+            - name: Install dependencies
+              shell: bash
+              working-dir: ${{ matrix.services }}
+              run: poetry install
+
+            - name: Run pytest
+              shell: bash
+              working-dir: ${{ matrix.services }}
+              run: poetry run pytest -q tests
