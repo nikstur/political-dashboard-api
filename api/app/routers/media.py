@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
 
 from .. import database, models
 
@@ -13,7 +13,7 @@ find_and_clean = database.create_find_and_clean(media_col)
 @router.get(
     "",
     response_model=List[
-        Union[models.MediaAttentionResponse, models.MediaTopicyByMediaSourceResponse,]
+        Union[models.MediaAttentionResponse, models.MediaTopicyByMediaSourceResponse]
     ],
 )
 async def media():

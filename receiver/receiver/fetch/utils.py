@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Callable, Dict, List
 from urllib.parse import urlparse
 
-import aiohttp
 from aiohttp import ClientSession
 from motor.motor_asyncio import AsyncIOMotorCollection
 

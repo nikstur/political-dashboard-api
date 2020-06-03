@@ -1,10 +1,10 @@
 from typing import Any
 
+import orjson
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-import orjson
 
-from .routers import twitter, facebook, media
+from .routers import facebook, media, twitter
 
 
 class ORJSONResponse(JSONResponse):
