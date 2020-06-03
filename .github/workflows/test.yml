@@ -52,19 +52,23 @@ jobs:
         shell: bash
         run: poetry config virtualenvs.in-project true
 
+      - env:
+          WORKING_DIR: ${{ matrix.services }}
+          LOCK_FILE: ${{ matrix.services }}poetry.lock
+
       - name: Set up Cache
         uses: actions/cache@v2
         id: cache
         with:
-          path: ${{ matrix.services }}/.venv
-          key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles( matrix.services + 'poetry.lock') }}
+          path: ${{ env.WORKING_DIR }}/.venv
+          key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles(env.LOCK_FILE) }}
 
       - name: Install dependencies
         shell: bash
-        working-directory: ${{ matrix.services }}
+        working-directory: ${{ env.WORKING_DIR }}
         run: poetry install
 
       - name: Run pytest
         shell: bash
-        working-directory: ${{ matrix.services }}
+        working-directory: ${{ env.WORKING_DIR }}
         run: poetry run pytest -q tests
