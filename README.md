@@ -1,5 +1,7 @@
 # REST-API for `political-dashboard.com`
 
+![test badge](https://github.com/nikstur/political-dashboard-api/workflows/Linting%20&%20Tests/badge.svg)
+
 ## Quick Start
 
 Install Prerequisites.
@@ -19,10 +21,12 @@ Navigate to `localhost:8000/docs` to see the generated swagger documentation of 
 
 ## Development
 
+All commits should be made to the `dev` branch. Afterwards a pull request to the master branch needs to be opened.
+
 To develop locally, two development tools need to be installed:
 
 - [pre-commit](https://pre-commit.com/#installation)
-- [Poetry](https://python-poetry.org/docs/#installation)
+- [poetry](https://python-poetry.org/docs/#installation)
 
 After installing both tools, install the pre-commit hook into the cloned repository from its root directory.
 
