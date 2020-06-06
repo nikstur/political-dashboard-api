@@ -23,6 +23,6 @@ USER appuser
 COPY --from=builder /opt/venv/ /home/appuser/venv/
 ENV PATH="/home/appuser/venv/bin:$PATH"
 
-COPY app/ app/
+COPY ./api/ api/
 
 ENTRYPOINT [ "sh", "/entrypoint.sh" ]
