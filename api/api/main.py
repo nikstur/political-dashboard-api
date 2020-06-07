@@ -4,10 +4,13 @@ import orjson
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
+from .database import database
 from .routers import facebook, media, twitter
 
 
 class ORJSONResponse(JSONResponse):
+    """Orjson drop-in replacement for default JSON serializer"""
+
     media_type = "application/json"
 
     def render(self, content: Any) -> bytes:
@@ -20,6 +23,17 @@ app = FastAPI(
     version="0.1.0",
     default_response_class=ORJSONResponse,
 )
+
+
+@app.on_event("startup")
+def startup():
+    database.connect()
+
+
+@app.on_event("shutdown")
+def shutdown():
+    database.disconnect()
+
 
 app.include_router(twitter.router, prefix="/twitter", tags=["twitter"])
 app.include_router(facebook.router, prefix="/facebook", tags=["facebook"])
