@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from pydantic import BaseModel, Field
@@ -14,6 +15,7 @@ class TwitterHashtagResponseBody(BaseModel):
 
 class TwitterHashtagResponse(BaseModel):
     data_type: str = Field("hashtags", example="hashtags")
+    time: datetime = Field(..., example=datetime.now())
     party: str = Field(None, example="AfD")
     items: List[TwitterHashtagResponseBody]
 
@@ -30,6 +32,7 @@ class SimpleFacebookResponseBody(BaseModel):
 
 class SimpleFacebookResponse(BaseModel):
     data_type: str = Field(..., example="likes")
+    time: datetime = Field(..., example=datetime.now())
     items: List[SimpleFacebookResponseBody]
 
 
@@ -46,6 +49,7 @@ class FacebookReactionsReponseBody(BaseModel):
 
 class FacebookReactionsReponse(BaseModel):
     data_type: str = Field("reactions", example="reactions")
+    time: datetime = Field(..., example=datetime.now())
     items: List[FacebookReactionsReponseBody]
 
 
@@ -56,11 +60,13 @@ class FacebookSentimentResponseBody(BaseModel):
 
 class FacebookSentimentResponse(BaseModel):
     data_type: str = Field("sentiment", example="sentiment")
+    time: datetime = Field(..., example=datetime.now())
     items: List[FacebookSentimentResponseBody]
 
 
 class FacebookAdsResponse(BaseModel):
     data_type: str = Field("ads", example="ads")
+    time: datetime = Field(..., example=datetime.now())
     count: int = Field(..., example=2724)
 
 
@@ -76,6 +82,7 @@ class MediaAttentionResponseBody(BaseModel):
 
 class MediaAttentionResponse(BaseModel):
     data_type: str = Field("attention", example="attention")
+    time: datetime = Field(..., example=datetime.now())
     items: List[MediaAttentionResponseBody]
 
 
@@ -92,4 +99,5 @@ class MediaTopicyByMediaSourceResponseBody(BaseModel):
 
 class MediaTopicyByMediaSourceResponse(BaseModel):
     data_type: str = Field("topics_by_media_source", example="topics_by_media_source")
+    time: datetime = Field(..., example=datetime.now())
     items: List[MediaTopicyByMediaSourceResponseBody]

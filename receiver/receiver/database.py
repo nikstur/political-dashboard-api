@@ -2,7 +2,7 @@ import os
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
-db_hostname = os.getenv("DB_HOSTNAME")
+db_hostname = os.getenv("DB_HOSTNAME", "db")
 
 
 def setup(drop_all: bool = False):
