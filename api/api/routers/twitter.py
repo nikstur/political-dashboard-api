@@ -1,13 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 
-from .. import database, models
+from .. import models
+from ..database import DataBase, get_database
 
 router = APIRouter()
-
-twitter_col = database.get_collection("twitter")
-find_and_clean = database.create_find_and_clean(twitter_col)
 
 
 @router.get(
@@ -15,8 +13,8 @@ find_and_clean = database.create_find_and_clean(twitter_col)
     response_model=List[models.TwitterHashtagResponse],
     response_model_exclude_unset=True,
 )
-async def twitter():
-    return await find_and_clean()
+async def twitter(db: DataBase = Depends(get_database)):
+    return await db.find_twitter()
 
 
 @router.get(
@@ -25,9 +23,10 @@ async def twitter():
     response_model_exclude_unset=True,
 )
 async def twitter_hashtags(
-    party: str = Query(None, description="Abbreviated name of party", min_length=3)
+    party: str = Query(None, description="Abbreviated name of party", min_length=3),
+    db: DataBase = Depends(get_database),
 ):
     if not party:
-        return await find_and_clean({"data_type": "hashtags"})
+        return await db.find_twitter({"data_type": "hashtags"})
     else:
-        return await find_and_clean({"data_type": "hashtags", "party": party})
+        return await db.find_twitter({"data_type": "hashtags", "party": party})
