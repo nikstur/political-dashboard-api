@@ -69,4 +69,4 @@ jobs:
       - name: Run pytest
         shell: bash
         working-directory: ${{ matrix.services }}
-        run: poetry run pytest -q tests
+        run: poetry run pytest -q -p no:warnings tests

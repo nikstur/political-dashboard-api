@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from .. import models
 from ..database import DataBase, get_database
 from ..dependencies import time_query
+from ..logic import generate_base_filter
 
 router = APIRouter()
 
@@ -23,9 +24,7 @@ router = APIRouter()
 async def facebook(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query),
 ):
-    db_filter: Dict = {}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({}, times)
     return await db.find_facebook(db_filter)
 
 
@@ -35,9 +34,7 @@ async def facebook(
 async def facebook_posts(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
-    db_filter: Dict = {"data_type": "posts"}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({"data_type": "posts"}, times)
     return await db.find_facebook(db_filter)
 
 
@@ -47,9 +44,7 @@ async def facebook_posts(
 async def facebook_shares(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
-    db_filter: Dict = {"data_type": "shares"}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({"data_type": "shares"}, times)
     return await db.find_facebook(db_filter)
 
 
@@ -59,9 +54,7 @@ async def facebook_shares(
 async def facebook_likes(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
-    db_filter: Dict = {"data_type": "likes"}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({"data_type": "likes"}, times)
     return await db.find_facebook(db_filter)
 
 
@@ -71,9 +64,7 @@ async def facebook_likes(
 async def facebook_reactions(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
-    db_filter: Dict = {"data_type": "reactions"}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({"data_type": "reactions"}, times)
     return await db.find_facebook(db_filter)
 
 
@@ -83,9 +74,7 @@ async def facebook_reactions(
 async def facebook_sentiment(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
-    db_filter: Dict = {"data_type": "sentiment"}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({"data_type": "sentiment"}, times)
     return await db.find_facebook(db_filter)
 
 
@@ -93,7 +82,5 @@ async def facebook_sentiment(
 async def facebook_ads(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
-    db_filter: Dict = {"data_type": "ads"}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({"data_type": "ads"}, times)
     return await db.find_facebook(db_filter)
