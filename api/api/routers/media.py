@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from .. import models
 from ..database import DataBase, get_database
 from ..dependencies import time_query
+from ..logic import generate_base_filter
 
 router = APIRouter()
 
@@ -18,9 +19,7 @@ router = APIRouter()
 async def media(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
-    db_filter: Dict = {}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({}, times)
     return await db.find_media(db_filter)
 
 
@@ -28,9 +27,7 @@ async def media(
 async def media_attention(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
-    db_filter: Dict = {"data_type": "attention"}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({"data_type": "attention"}, times)
     return await db.find_media(db_filter)
 
 
@@ -41,7 +38,5 @@ async def media_attention(
 async def media_topics_by_media_source(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
-    db_filter: Dict = {"data_type": "topics_by_media_source"}
-    if times:
-        db_filter["time"] = times
+    db_filter = generate_base_filter({"data_type": "topics_by_media_source"}, times)
     return await db.find_media(db_filter)

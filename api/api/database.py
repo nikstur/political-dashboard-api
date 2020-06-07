@@ -13,31 +13,14 @@ class DataBase:
         self.hostname: str = os.getenv("DB_HOSTNAME", "db")
 
     def connect(self) -> None:
-        self.client: AsyncIOMotorClient = AsyncIOMotorClient(host=self.hostname)
+        self._get_client()
         self._get_db()
 
-    def disconnect(self) -> None:
-        self.client.close()
-
-    def drop_all(self) -> None:
-        self.client.drop_database("database")
+    def _get_client(self) -> None:
+        self.client: AsyncIOMotorClient = AsyncIOMotorClient(host=self.hostname)
 
     def _get_db(self) -> None:
         self.db: AsyncIOMotorDatabase = self.client["database"]
-
-    def _get_collection(self, collection_name: str) -> AsyncIOMotorCollection:
-        return self.db[collection_name]
-
-    async def _find_and_clean(
-        self, collection: AsyncIOMotorCollection, filter: Dict = None
-    ) -> List[Dict]:
-        """Find data and remove datbase ID"""
-        cursor = collection.find(filter)
-        docs = []
-        async for doc in cursor:
-            doc.pop("_id")
-            docs.append(doc)
-        return docs
 
     async def find_twitter(self, filter: Dict = None) -> List[Dict]:
         return await self._find_and_clean(
@@ -51,6 +34,23 @@ class DataBase:
 
     async def find_media(self, filter: Dict = None) -> List[Dict]:
         return await self._find_and_clean(self._get_collection("media"), filter=filter)
+
+    async def _find_and_clean(
+        self, collection: AsyncIOMotorCollection, filter: Dict = None
+    ) -> List[Dict]:
+        """Find data and remove datbase ID"""
+        cursor = collection.find(filter)
+        docs = []
+        async for doc in cursor:
+            doc.pop("_id")
+            docs.append(doc)
+        return docs
+
+    def _get_collection(self, collection_name: str) -> AsyncIOMotorCollection:
+        return self.db[collection_name]
+
+    def disconnect(self) -> None:
+        self.client.close()
 
 
 database = DataBase()
