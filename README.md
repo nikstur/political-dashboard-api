@@ -1,6 +1,6 @@
 # REST-API for `political-dashboard.com`
 
-![test badge](https://github.com/nikstur/political-dashboard-api/workflows/Linting%20&%20Tests/badge.svg)
+![test badge](https://github.com/nikstur/political-dashboard-api/workflows/test/badge.svg)
 
 ## Quick Start
 
