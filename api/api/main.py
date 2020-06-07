@@ -21,6 +21,7 @@ app = FastAPI(
     title="API for political-dashboard.com",
     description="REST-API to programmatically access data from political-dashboard.com.",
     version="0.1.0",
+    redoc_url=None,
     default_response_class=ORJSONResponse,
 )
 
@@ -35,6 +36,6 @@ def shutdown():
     database.disconnect()
 
 
-app.include_router(twitter.router, prefix="/twitter", tags=["twitter"])
-app.include_router(facebook.router, prefix="/facebook", tags=["facebook"])
-app.include_router(media.router, prefix="/media", tags=["media"])
+app.include_router(twitter.router, prefix="/twitter", tags=["Twitter"])
+app.include_router(facebook.router, prefix="/facebook", tags=["Facebook"])
+app.include_router(media.router, prefix="/media", tags=["Media"])
