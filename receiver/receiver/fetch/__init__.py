@@ -1,3 +1,1 @@
-from .facebook import facebook
-from .media import media
-from .twitter import twitter
+from .main import fetch_all_endpoints, fetch_single_endpoint

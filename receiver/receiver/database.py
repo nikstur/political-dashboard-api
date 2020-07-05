@@ -3,6 +3,7 @@ import os
 from motor.motor_asyncio import AsyncIOMotorClient
 
 db_hostname = os.getenv("DB_HOSTNAME", "db")
+print(f"{db_hostname}")
 
 
 def setup(drop_all: bool = False):

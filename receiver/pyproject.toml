@@ -5,7 +5,7 @@ description = ""
 authors = ["Niklas Sturm"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 motor = "^2.1.0"
 aiohttp = {extras = ["speedups"], version = "^3.6.2"}
 

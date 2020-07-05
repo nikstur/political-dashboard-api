@@ -12,9 +12,6 @@ FROM python:3.8-slim-buster
 COPY update-packages.sh .
 RUN chmod +x ./update-packages.sh && ./update-packages.sh
 
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 RUN useradd --create-home appuser
 WORKDIR /home/appuser/
 USER appuser
@@ -24,4 +21,4 @@ ENV PATH="/home/appuser/venv/bin:$PATH"
 
 COPY receiver/ receiver/
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "python", "-m", "receiver.main" ]
