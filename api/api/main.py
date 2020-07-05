@@ -36,6 +36,6 @@ def shutdown():
     database.disconnect()
 
 
-app.include_router(twitter.router, prefix="/twitter", tags=["Twitter"])
 app.include_router(facebook.router, prefix="/facebook", tags=["Facebook"])
 app.include_router(media.router, prefix="/media", tags=["Media"])
+app.include_router(twitter.router, prefix="/twitter", tags=["Twitter"])

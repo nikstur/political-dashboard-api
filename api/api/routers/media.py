@@ -13,7 +13,12 @@ router = APIRouter()
 @router.get(
     "",
     response_model=List[
-        Union[models.MediaAttentionResponse, models.MediaTopicyByMediaSourceResponse]
+        Union[
+            models.URLsResponse,
+            models.MediaAttentionResponse,
+            models.MediaTopicsResponse,
+            models.MediaTopicyByMediaSourceResponse,
+        ]
     ],
 )
 async def media(
@@ -23,11 +28,27 @@ async def media(
     return await db.find_media(db_filter)
 
 
+@router.get("/urls", response_model=List[models.URLsResponse])
+async def media_urls(
+    db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
+):
+    db_filter = generate_base_filter({"data_type": "urls"}, times)
+    return await db.find_media(db_filter)
+
+
 @router.get("/attention", response_model=List[models.MediaAttentionResponse])
 async def media_attention(
     db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
 ):
     db_filter = generate_base_filter({"data_type": "attention"}, times)
+    return await db.find_media(db_filter)
+
+
+@router.get("/topics", response_model=List[models.MediaTopicsResponse])
+async def media_topics(
+    db: DataBase = Depends(get_database), times: Dict = Depends(time_query)
+):
+    db_filter = generate_base_filter({"data_type": "topics"}, times)
     return await db.find_media(db_filter)
 
 
