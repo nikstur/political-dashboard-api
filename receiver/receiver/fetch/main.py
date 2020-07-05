@@ -3,13 +3,13 @@ from typing import Dict, List, Union
 
 from aiohttp import ClientSession
 
+from .endpoints import base_url
 from .preprocessing import transform
 
 
 async def fetch_all_endpoints(
     endpoints: List[Dict], session: ClientSession
 ) -> List[Dict]:
-    base_url = "https://political-dashboard.com/json_files/"
     for endpoint in endpoints:
         endpoint["url"] = base_url + endpoint["url"]
 

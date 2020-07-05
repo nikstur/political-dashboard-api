@@ -10,11 +10,13 @@ from .preprocessing import (
     transform_items_topics,
 )
 
+base_url = "https://political-dashboard.com/json_files/"
+
 facebook = [
     {
         "type": "js",
         "url": "ads_top10.js",
-        "key": "ads_top10",
+        "key": "ads",
         "func": partial(transform_items_js, keys=["advertiser", "count"]),
     },
     {
@@ -32,7 +34,7 @@ facebook = [
     {
         "type": "json",
         "url": "counter_ads.json",
-        "key": "ads",
+        "key": "ads_count",
         "func": transform_items_counter,
     },
     {
@@ -55,14 +57,14 @@ facebook = [
     },
     {
         "type": "json",
-        "url": "fb_likes.json",
-        "key": "likes",
+        "url": "fb_shares.json",
+        "key": "shares",
         "func": transform_items_subset,
     },
     {
         "type": "json",
-        "url": "fb_shares.json",
-        "key": "shares",
+        "url": "fb_likes.json",
+        "key": "likes",
         "func": transform_items_subset,
     },
 ]
@@ -76,15 +78,15 @@ media = [
     },
     {
         "type": "json",
-        "url": "topics_news.json",
-        "key": "topics",
-        "func": transform_items_topics,
-    },
-    {
-        "type": "json",
         "url": "news_party_attention.json",
         "key": "attention",
         "func": transform_items_subset,
+    },
+    {
+        "type": "json",
+        "url": "topics_news.json",
+        "key": "topics",
+        "func": transform_items_topics,
     },
     {
         "type": "json",
@@ -104,7 +106,7 @@ twitter = [
     {
         "type": "json",
         "url": "spiderplot.json",
-        "key": "hashtags",
+        "key": "hashtags_by_party",
         "func": transform_items_none,
     },
     {
