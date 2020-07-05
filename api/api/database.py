@@ -43,6 +43,7 @@ class DataBase:
         docs = []
         async for doc in cursor:
             doc.pop("_id")
+            doc["date"] = doc["date"].date()
             docs.append(doc)
         return docs
 

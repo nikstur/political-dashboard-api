@@ -1,21 +1,24 @@
 import asyncio
+from functools import partial
 
 import aiohttp
 
-from . import database, fetch
+from . import database
+from .fetch import endpoints, fetch_all_endpoints
 
 
 async def main() -> None:
-    twitter_col, facebook_col, media_col = database.setup(drop_all=True)
+    db = database.setup(drop_all=True)
 
-    async with aiohttp.ClientSession() as session:
-        twitter_results = await fetch.twitter(session)
-        facebook_results = await fetch.facebook(session)
-        media_results = await fetch.media(session)
+    async with aiohttp.ClientSession(headers={"Connection": "keep-alive"}) as session:
+        fetch_endpoints = partial(fetch_all_endpoints, session=session)
+        facebook_data = await fetch_endpoints(endpoints.facebook)
+        media_data = await fetch_endpoints(endpoints.media)
+        twitter_data = await fetch_endpoints(endpoints.twitter)
 
-    twitter_col.insert_many(twitter_results)
-    facebook_col.insert_many(facebook_results)
-    media_col.insert_many(media_results)
+    db.facebook.insert_many(facebook_data)
+    db.media.insert_many(media_data)
+    db.twitter.insert_many(twitter_data)
 
 
 if __name__ == "__main__":

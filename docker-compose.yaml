@@ -1,7 +1,8 @@
-version: "3"
+version: '3.8'
 services:
   receiver:
     build: ./receiver
+    init: true
     environment:
       - DB_HOSTNAME=db
     depends_on:
@@ -14,11 +15,12 @@ services:
     # restart: always
   api:
     build: ./api
+    init: true
     environment:
       - DB_HOSTNAME=db
     depends_on:
       - receiver
       - db
     ports:
-      - "8000:8000"
+      - '8000:8000'
     # restart: always
