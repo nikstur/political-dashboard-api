@@ -1,39 +1,77 @@
-from datetime import datetime
-from typing import List
+import datetime
+from typing import Dict, List
 
 from pydantic import BaseModel, Field
 
-# Twitter
+
+class BaseResponse(BaseModel):
+    date: datetime.date = Field(..., example=datetime.date.today())
 
 
-class TwitterHashtagResponseBody(BaseModel):
-    text: str = Field(..., example="corona")
-    biased: int = Field(..., example=0)
-    count: int = Field(..., example=231)
-    hours: int = Field(..., example=1192)
+class URLsResponseBody(BaseModel):
+    text: str = Field(
+        ..., example="http://www.tagesschau.de/inland/toennis-gabriel-berater-101.html"
+    )
+    count: int = Field(..., example=5985)
 
 
-class TwitterHashtagResponse(BaseModel):
-    data_type: str = Field("hashtags", example="hashtags")
-    time: datetime = Field(..., example=datetime.now())
-    party: str = Field(None, example="AfD")
-    items: List[TwitterHashtagResponseBody]
+class URLsResponse(BaseResponse):
+    data_type: str = Field("urls", example="urls")
+    items: List[URLsResponseBody]
 
 
 # Facebook
 
 
-class SimpleFacebookResponseBody(BaseModel):
-    text: str = Field(..., example="AfD")
-    count: int = Field(..., example=96320)
-    biased: int = Field(..., example=1)
-    hours: int = Field(..., example=0)
+class FacebookAdsResponseBody(BaseModel):
+    advertiser: str = Field("advertiser", example="FDP Berlin")
+    count: int = Field(..., example=304)
 
 
-class SimpleFacebookResponse(BaseModel):
-    data_type: str = Field(..., example="likes")
-    time: datetime = Field(..., example=datetime.now())
-    items: List[SimpleFacebookResponseBody]
+class FacebookAdsResponse(BaseResponse):
+    data_type: str = Field("ads", example="ads")
+    items: List[FacebookAdsResponseBody]
+
+
+class FacebookAdsImpressionsResponseBody(BaseModel):
+    advertiser: str = Field("advertiser", example="Bundesregierung")
+    lower_bound: int = Field(..., example=6815000)
+    lower_bound_spending: int = Field(..., example=34100)
+    upper_bound: int = Field(..., example=7859980)
+    upper_bound_spending: int = Field(..., example=34100)
+
+
+class FacebookAdsImpressionsResponse(BaseResponse):
+    data_type: str = Field("ads_impressions", example="ads_impressions")
+    items: List[FacebookAdsImpressionsResponseBody]
+
+
+class FacebookAdsRegionsResponseBodyParties(BaseModel):
+    AfD: float = Field(..., example=0.1195105731722062)
+    CDU_CSU: float = Field(..., example=0.125)
+    FDP: float = Field(..., example=0.12444536949598713)
+    Gruenen: float = Field(..., example=0.0)
+    Linke: float = Field(..., example=0.10391824117789662)
+    SPD: float = Field(..., example=0.05724696128397787)
+
+
+class FacebookAdsRegionsResponseBody(BaseModel):
+    state: str = Field("state", example="Bayern")
+    parties: FacebookAdsRegionsResponseBodyParties
+
+
+class FacebookAdsRegionsResponse(BaseResponse):
+    data_type: str = Field("ads_regions", example="ads_regions")
+    items: List[FacebookAdsRegionsResponseBody]
+
+
+class FacebookAdsCountResponseBody(BaseModel):
+    count: int = Field(..., example=3294)
+
+
+class FacebookAdsCountResponse(BaseResponse):
+    data_type: str = Field("ads_count", example="ads_count")
+    items: List[FacebookAdsCountResponseBody]
 
 
 class FacebookReactionsReponseBody(BaseModel):
@@ -47,9 +85,8 @@ class FacebookReactionsReponseBody(BaseModel):
     SPD: float = Field(..., example=0.054445098906988704)
 
 
-class FacebookReactionsReponse(BaseModel):
+class FacebookReactionsReponse(BaseResponse):
     data_type: str = Field("reactions", example="reactions")
-    time: datetime = Field(..., example=datetime.now())
     items: List[FacebookReactionsReponseBody]
 
 
@@ -58,16 +95,19 @@ class FacebookSentimentResponseBody(BaseModel):
     posts: float = Field(..., example=-0.06287638888888888)
 
 
-class FacebookSentimentResponse(BaseModel):
+class FacebookSentimentResponse(BaseResponse):
     data_type: str = Field("sentiment", example="sentiment")
-    time: datetime = Field(..., example=datetime.now())
     items: List[FacebookSentimentResponseBody]
 
 
-class FacebookAdsResponse(BaseModel):
-    data_type: str = Field("ads", example="ads")
-    time: datetime = Field(..., example=datetime.now())
-    count: int = Field(..., example=2724)
+class SimpleFacebookResponseBody(BaseModel):
+    text: str = Field(..., example="AfD")
+    count: int = Field(..., example=96320)
+
+
+class SimpleFacebookResponse(BaseResponse):
+    data_type: str = Field(..., example="likes")
+    items: List[SimpleFacebookResponseBody]
 
 
 # Media
@@ -76,14 +116,25 @@ class FacebookAdsResponse(BaseModel):
 class MediaAttentionResponseBody(BaseModel):
     text: str = Field(..., example="AfD")
     count: int = Field(..., example=319)
-    biased: int = Field(..., example=1)
-    hours: int = Field(..., example=0)
 
 
-class MediaAttentionResponse(BaseModel):
+class MediaAttentionResponse(BaseResponse):
     data_type: str = Field("attention", example="attention")
-    time: datetime = Field(..., example=datetime.now())
     items: List[MediaAttentionResponseBody]
+
+
+class MediaTopicsResponseBody(BaseModel):
+    cluster_name: str = Field(
+        ...,
+        example="söder,merz,ministerpräsident,cdu,laschet,csu,kanzlerkandidatur,chef",
+    )
+    cluster_share: float = Field(..., example=0.15755530934093848)
+    keywords: Dict[str, float]
+
+
+class MediaTopicsResponse(BaseResponse):
+    data_type: str = Field("topics", example="topics")
+    items: List[MediaTopicsResponseBody]
 
 
 class MediaTopicyByMediaSourceResponseBody(BaseModel):
@@ -97,7 +148,36 @@ class MediaTopicyByMediaSourceResponseBody(BaseModel):
     CR: float = Field(..., example=0.12002624146426925)
 
 
-class MediaTopicyByMediaSourceResponse(BaseModel):
+class MediaTopicyByMediaSourceResponse(BaseResponse):
     data_type: str = Field("topics_by_media_source", example="topics_by_media_source")
-    time: datetime = Field(..., example=datetime.now())
     items: List[MediaTopicyByMediaSourceResponseBody]
+
+
+# Twitter
+
+
+class TwitterHashtagsByPartyResponseBody(BaseModel):
+    text: str = Field(..., example="seehofer")
+    AfD: float = Field(..., example=0.386357741700678)
+    CDU: float = Field(..., example=0.06478919561249338)
+    CSU: float = Field(..., example=0.13987216902910365)
+    FDP: float = Field(..., example=0.14515935455340986)
+    Gruenen: float = Field(..., example=0.032320637537282655)
+    Linke: float = Field(..., example=0.17705580266004384)
+    SPD: float = Field(..., example=0.054445098906988704)
+
+
+class TwitterHashtagsByPartyResponse(BaseResponse):
+    data_type: str = Field("hashtags_by_party", example="hashtags_by_party")
+    items: List[TwitterHashtagsByPartyResponseBody]
+
+
+class TwitterHashtagResponseBody(BaseModel):
+    text: str = Field(..., example="corona")
+    count: int = Field(..., example=231)
+
+
+class TwitterHashtagResponse(BaseResponse):
+    data_type: str = Field("hashtags", example="hashtags")
+    party: str = Field(None, example="AfD")
+    items: List[TwitterHashtagResponseBody]
