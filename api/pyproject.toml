@@ -6,20 +6,19 @@ authors = ["Niklas Sturm"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-fastapi = "^0.54.1"
+fastapi = "^0.60.1"
 motor = "^2.1.0"
-uvicorn = "^0.11.5"
-orjson = "^3.0.2"
+uvicorn = "^0.11.7"
+orjson = "^3.3.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-pylint = "^2.5.2"
+pytest = "^6.0.0"
 black = "^19.10b0"
 bandit = "^1.6.2"
-mypy = "^0.770"
-flake8 = "^3.8.2"
-isort = {extras = ["pyproject"], version = "^4.3.21"}
-pytest-asyncio = "^0.12.0"
+mypy = "^0.782"
+flake8 = "^3.8.3"
+isort = {extras = ["pyproject"], version = "^5.2.1"}
+pytest-asyncio = "^0.14.0"
 
 [tool.isort]
 line_length = 88
