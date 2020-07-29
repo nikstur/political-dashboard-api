@@ -3,10 +3,12 @@ from typing import Dict, List, Union
 from fastapi import APIRouter, Depends
 
 from .. import models
-from ..database import DataBase, get_database
-from ..dependencies import time_query
+from ..database import DataBase
+from ..dependencies import db_connection, time_query
 
 router = APIRouter()
+
+collection = "media"
 
 
 @router.get(
@@ -21,30 +23,30 @@ router = APIRouter()
     ],
 )
 async def media(
-    db: DataBase = Depends(get_database), time_filter: Dict = Depends(time_query)
+    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find_media({}, [time_filter])
+    return await db.find(collection, {}, time_filter)
 
 
 @router.get("/urls", response_model=List[models.URLsResponse])
 async def media_urls(
-    db: DataBase = Depends(get_database), time_filter: Dict = Depends(time_query)
+    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find_media({"data_type": "urls"}, [time_filter])
+    return await db.find(collection, {"data_type": "urls"}, time_filter)
 
 
 @router.get("/attention", response_model=List[models.MediaAttentionResponse])
 async def media_attention(
-    db: DataBase = Depends(get_database), time_filter: Dict = Depends(time_query)
+    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find_media({"data_type": "attention"}, [time_filter])
+    return await db.find(collection, {"data_type": "attention"}, time_filter)
 
 
 @router.get("/topics", response_model=List[models.MediaTopicsResponse])
 async def media_topics(
-    db: DataBase = Depends(get_database), time_filter: Dict = Depends(time_query)
+    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find_media({"data_type": "topics"}, [time_filter])
+    return await db.find(collection, {"data_type": "topics"}, time_filter)
 
 
 @router.get(
@@ -52,6 +54,8 @@ async def media_topics(
     response_model=List[models.MediaTopicyByMediaSourceResponse],
 )
 async def media_topics_by_media_source(
-    db: DataBase = Depends(get_database), time_filter: Dict = Depends(time_query)
+    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find_media({"data_type": "topics_by_media_source"}, [time_filter])
+    return await db.find(
+        collection, {"data_type": "topics_by_media_source"}, time_filter
+    )

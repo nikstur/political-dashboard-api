@@ -16,7 +16,7 @@ class URLsResponseBody(BaseModel):
 
 
 class URLsResponse(BaseResponse):
-    data_type: str = Field("urls", example="urls")
+    key: str = Field("urls", example="urls")
     items: List[URLsResponseBody]
 
 
@@ -29,7 +29,7 @@ class FacebookAdsResponseBody(BaseModel):
 
 
 class FacebookAdsResponse(BaseResponse):
-    data_type: str = Field("ads", example="ads")
+    key: str = Field("ads", example="ads")
     items: List[FacebookAdsResponseBody]
 
 
@@ -42,7 +42,7 @@ class FacebookAdsImpressionsResponseBody(BaseModel):
 
 
 class FacebookAdsImpressionsResponse(BaseResponse):
-    data_type: str = Field("ads_impressions", example="ads_impressions")
+    key: str = Field("ads_impressions", example="ads_impressions")
     items: List[FacebookAdsImpressionsResponseBody]
 
 
@@ -61,7 +61,7 @@ class FacebookAdsRegionsResponseBody(BaseModel):
 
 
 class FacebookAdsRegionsResponse(BaseResponse):
-    data_type: str = Field("ads_regions", example="ads_regions")
+    key: str = Field("ads_regions", example="ads_regions")
     items: List[FacebookAdsRegionsResponseBody]
 
 
@@ -70,7 +70,7 @@ class FacebookAdsCountResponseBody(BaseModel):
 
 
 class FacebookAdsCountResponse(BaseResponse):
-    data_type: str = Field("ads_count", example="ads_count")
+    key: str = Field("ads_count", example="ads_count")
     items: List[FacebookAdsCountResponseBody]
 
 
@@ -86,7 +86,7 @@ class FacebookReactionsReponseBody(BaseModel):
 
 
 class FacebookReactionsReponse(BaseResponse):
-    data_type: str = Field("reactions", example="reactions")
+    key: str = Field("reactions", example="reactions")
     items: List[FacebookReactionsReponseBody]
 
 
@@ -96,7 +96,7 @@ class FacebookSentimentResponseBody(BaseModel):
 
 
 class FacebookSentimentResponse(BaseResponse):
-    data_type: str = Field("sentiment", example="sentiment")
+    key: str = Field("sentiment", example="sentiment")
     items: List[FacebookSentimentResponseBody]
 
 
@@ -106,7 +106,7 @@ class SimpleFacebookResponseBody(BaseModel):
 
 
 class SimpleFacebookResponse(BaseResponse):
-    data_type: str = Field(..., example="likes")
+    key: str = Field(..., example="likes")
     items: List[SimpleFacebookResponseBody]
 
 
@@ -119,7 +119,7 @@ class MediaAttentionResponseBody(BaseModel):
 
 
 class MediaAttentionResponse(BaseResponse):
-    data_type: str = Field("attention", example="attention")
+    key: str = Field("attention", example="attention")
     items: List[MediaAttentionResponseBody]
 
 
@@ -133,7 +133,7 @@ class MediaTopicsResponseBody(BaseModel):
 
 
 class MediaTopicsResponse(BaseResponse):
-    data_type: str = Field("topics", example="topics")
+    key: str = Field("topics", example="topics")
     items: List[MediaTopicsResponseBody]
 
 
@@ -149,7 +149,7 @@ class MediaTopicyByMediaSourceResponseBody(BaseModel):
 
 
 class MediaTopicyByMediaSourceResponse(BaseResponse):
-    data_type: str = Field("topics_by_media_source", example="topics_by_media_source")
+    key: str = Field("topics_by_media_source", example="topics_by_media_source")
     items: List[MediaTopicyByMediaSourceResponseBody]
 
 
@@ -168,7 +168,7 @@ class TwitterHashtagsByPartyResponseBody(BaseModel):
 
 
 class TwitterHashtagsByPartyResponse(BaseResponse):
-    data_type: str = Field("hashtags_by_party", example="hashtags_by_party")
+    key: str = Field("hashtags_by_party", example="hashtags_by_party")
     items: List[TwitterHashtagsByPartyResponseBody]
 
 
@@ -178,6 +178,6 @@ class TwitterHashtagResponseBody(BaseModel):
 
 
 class TwitterHashtagResponse(BaseResponse):
-    data_type: str = Field("hashtags", example="hashtags")
+    key: str = Field("hashtags", example="hashtags")
     party: str = Field(None, example="AfD")
     items: List[TwitterHashtagResponseBody]

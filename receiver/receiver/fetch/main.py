@@ -22,12 +22,12 @@ async def fetch_all_endpoints(
 async def fetch_single_endpoint(session: ClientSession, endpoint: Dict) -> Dict:
     url = endpoint["url"]
     data_type = endpoint["type"]
-    data_key = endpoint["key"]
+    key = endpoint["key"]
     transform_func = endpoint["func"]
 
     data = await fetch_data(session, url, data_type)
     print("Fetched:", url)
-    transformed_data = transform(data, transform_func, data_key)
+    transformed_data = transform(data, transform_func, key)
 
     if endpoint.get("party", None):
         endpoint["party"] = endpoint["party"]
@@ -38,12 +38,10 @@ async def fetch_single_endpoint(session: ClientSession, endpoint: Dict) -> Dict:
 async def fetch_data(
     session: ClientSession, url: str, data_type: str
 ) -> Union[Dict, str]:
-    if data_type == "js":
-        async with session.get(url) as response:
-            byte_data = await response.read()
-            data = byte_data.decode("utf-8")
-    elif data_type == "json":
-        async with session.get(url) as response:
+    async with session.get(url) as response:
+        if data_type == "js":
+            byte_data: bytes = await response.read()
+            data: Union[str, Dict] = byte_data.decode("utf-8")
+        elif data_type == "json":
             data = await response.json()
-
     return data

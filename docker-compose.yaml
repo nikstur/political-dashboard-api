@@ -3,21 +3,18 @@ services:
   receiver:
     build: ./receiver
     init: true
-    environment:
-      - DB_HOSTNAME=db
     depends_on:
       - db
     # restart: always
   db:
     image: mongo:4.2.6
+    init: true
     logging:
       driver: none
     # restart: always
   api:
     build: ./api
     init: true
-    environment:
-      - DB_HOSTNAME=db
     depends_on:
       - receiver
       - db
