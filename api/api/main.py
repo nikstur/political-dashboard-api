@@ -1,26 +1,14 @@
-from typing import Any
-
-import orjson
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi.responses import ORJSONResponse
 
 from .database import database
 from .routers import facebook, media, twitter
-
-
-class ORJSONResponse(JSONResponse):
-    """Orjson drop-in replacement for default JSON serializer"""
-
-    media_type = "application/json"
-
-    def render(self, content: Any) -> bytes:
-        return orjson.dumps(content)
-
 
 app = FastAPI(
     title="API for political-dashboard.com",
     description="REST-API to programmatically access data from political-dashboard.com.",
     version="0.1.0",
+    docs_url="/",
     redoc_url=None,
     default_response_class=ORJSONResponse,
 )

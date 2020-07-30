@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 import pytest
 from api import dependencies
@@ -8,16 +8,16 @@ from api import dependencies
     "start_time,end_time,expected",
     [
         (None, None, None),
-        (None, datetime(2020, 6, 8), None),
-        (datetime(2020, 6, 7), None, None),
+        (None, date(2020, 6, 8), None),
+        (date(2020, 6, 7), None, None),
         (
-            datetime(2020, 6, 7),
-            datetime(2020, 6, 8),
-            {"$gte": datetime(2020, 6, 7), "$lte": datetime(2020, 6, 8)},
+            date(2020, 6, 7),
+            date(2020, 6, 8),
+            {"time": {"$gte": datetime(2020, 6, 7), "$lte": datetime(2020, 6, 8)}},
         ),
     ],
 )
 @pytest.mark.asyncio
 async def test_time_query(start_time, end_time, expected):
-    times = await dependencies.time_query(start_time, end_time)
-    assert times == expected
+    time_filter = await dependencies.time_query(start_time, end_time)
+    assert time_filter == expected

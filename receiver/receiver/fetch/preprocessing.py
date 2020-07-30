@@ -4,12 +4,10 @@ from datetime import datetime
 from typing import Callable, Dict, List, Union
 
 
-def transform(
-    data: Union[Dict, str], transform_items_func: Callable, data_type: str
-) -> Dict:
+def transform(data: Union[Dict, str], transform_items_func: Callable, key: str) -> Dict:
     transformed_items: List[Dict] = transform_items_func(data)
     transformed_data = {
-        "data_type": data_type,
+        "key": key,
         "date": datetime.utcnow(),
         "items": transformed_items,
     }

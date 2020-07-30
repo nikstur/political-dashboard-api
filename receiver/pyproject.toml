@@ -5,18 +5,17 @@ description = ""
 authors = ["Niklas Sturm"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 motor = "^2.1.0"
 aiohttp = {extras = ["speedups"], version = "^3.6.2"}
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-pylint = "^2.5.2"
+pytest = "^6.0.0"
 bandit = "^1.6.2"
 black = "^19.10b0"
-mypy = "^0.770"
-flake8 = "^3.8.2"
-isort = {extras = ["pyproject"], version = "^4.3.21"}
+mypy = "^0.782"
+flake8 = "^3.8.3"
+isort = {extras = ["pyproject"], version = "^5.2.1"}
 
 [tool.isort]
 line_length = 88

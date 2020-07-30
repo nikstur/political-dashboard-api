@@ -1,10 +1,6 @@
 import pytest
-from api.database import DataBase, get_database
-from motor.motor_asyncio import (
-    AsyncIOMotorClient,
-    AsyncIOMotorCollection,
-    AsyncIOMotorDatabase,
-)
+from api.database import DataBase
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 
 @pytest.mark.parametrize("setenv", [("true"), ("false")])
@@ -39,17 +35,3 @@ def test__get_db(monkeypatch):
     database._get_db()
     assert isinstance(database.db, AsyncIOMotorDatabase)
     assert database.db.name == "database"
-
-
-def test__get_collection(monkeypatch):
-    monkeypatch.setenv("DB_HOSTNAME", "db")
-    database = DataBase()
-    database.connect()
-    collection = database._get_collection("twitter")
-    assert isinstance(collection, AsyncIOMotorCollection)
-    assert collection.name == "twitter"
-
-
-def test_get_database():
-    database = get_database()
-    assert isinstance(database, DataBase)
