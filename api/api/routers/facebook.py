@@ -35,7 +35,8 @@ async def facebook(
 async def facebook_ads(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "ads"}, time_filter)
+    print(db.find(collection, {"key": "ads"}, time_filter))
+    return await db.find(collection, {"key": "ads"}, time_filter)
 
 
 @router.get(
@@ -44,21 +45,21 @@ async def facebook_ads(
 async def facebook_ads_impressions(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "ads_impressions"}, time_filter)
+    return await db.find(collection, {"key": "ads_impressions"}, time_filter)
 
 
 @router.get("/ads_regions", response_model=List[models.FacebookAdsRegionsResponse])
 async def facebook_ads_regions(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "ads_regions"}, time_filter)
+    return await db.find(collection, {"key": "ads_regions"}, time_filter)
 
 
 @router.get("/ads_count", response_model=List[models.FacebookAdsCountResponse])
 async def facebook_ads_count(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "ads_count"}, time_filter)
+    return await db.find(collection, {"key": "ads_count"}, time_filter)
 
 
 @router.get(
@@ -67,7 +68,7 @@ async def facebook_ads_count(
 async def facebook_reactions(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "reactions"}, time_filter)
+    return await db.find(collection, {"key": "reactions"}, time_filter)
 
 
 @router.get(
@@ -76,7 +77,7 @@ async def facebook_reactions(
 async def facebook_sentiment(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "sentiment"}, time_filter)
+    return await db.find(collection, {"key": "sentiment"}, time_filter)
 
 
 @router.get(
@@ -85,7 +86,7 @@ async def facebook_sentiment(
 async def facebook_posts(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "posts"}, time_filter)
+    return await db.find(collection, {"key": "posts"}, time_filter)
 
 
 @router.get(
@@ -94,7 +95,7 @@ async def facebook_posts(
 async def facebook_shares(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "shares"}, time_filter)
+    return await db.find(collection, {"key": "shares"}, time_filter)
 
 
 @router.get(
@@ -103,4 +104,4 @@ async def facebook_shares(
 async def facebook_likes(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "likes"}, time_filter)
+    return await db.find(collection, {"key": "likes"}, time_filter)

@@ -34,7 +34,7 @@ async def twitter(
 async def twitter_urls(
     db: DBContent = Depends(db_content_conn), time_query: Dict = Depends(time_query),
 ):
-    return await db.find(collection, {"data_type": "urls"}, time_query)
+    return await db.find(collection, {"key": "urls"}, time_query)
 
 
 @router.get(
@@ -48,9 +48,7 @@ async def twitter_hashtags(
     party: str = Query(None, description="Abbreviated name of party", min_length=3),
 ):
     party_filter = {"party": party}
-    return await db.find(
-        collection, {"data_type": "hashtags"}, time_query, party_filter
-    )
+    return await db.find(collection, {"key": "hashtags"}, time_query, party_filter)
 
 
 @router.get(
@@ -59,4 +57,4 @@ async def twitter_hashtags(
 async def twitter_hashtags_by_party(
     db: DBContent = Depends(db_content_conn), time_query: Dict = Depends(time_query),
 ):
-    return await db.find(collection, {"data_type": "hashtags_by_party"}, time_query)
+    return await db.find(collection, {"key": "hashtags_by_party"}, time_query)
