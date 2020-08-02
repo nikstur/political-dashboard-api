@@ -33,14 +33,14 @@ class AdministrationCreateKeyResponse(BaseModel):
 # Facebook
 
 
-class FacebookAdsResponseBody(BaseModel):
+class FacebookAdsByAdvertiserResponseBody(BaseModel):
     advertiser: str = Field("advertiser", example="FDP Berlin")
     count: int = Field(..., example=304)
 
 
-class FacebookAdsResponse(BaseResponse):
+class FacebookAdsByAdvertiserResponse(BaseResponse):
     key: str = Field("ads", example="ads")
-    items: List[FacebookAdsResponseBody]
+    items: List[FacebookAdsByAdvertiserResponseBody]
 
 
 class FacebookAdsImpressionsResponseBody(BaseModel):

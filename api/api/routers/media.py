@@ -32,21 +32,21 @@ async def media(
 async def media_urls(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "urls"}, time_filter)
+    return await db.find(collection, {"key": "urls"}, time_filter)
 
 
 @router.get("/attention", response_model=List[models.MediaAttentionResponse])
 async def media_attention(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "attention"}, time_filter)
+    return await db.find(collection, {"key": "attention"}, time_filter)
 
 
 @router.get("/topics", response_model=List[models.MediaTopicsResponse])
 async def media_topics(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(collection, {"data_type": "topics"}, time_filter)
+    return await db.find(collection, {"key": "topics"}, time_filter)
 
 
 @router.get(
@@ -56,6 +56,4 @@ async def media_topics(
 async def media_topics_by_media_source(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    return await db.find(
-        collection, {"data_type": "topics_by_media_source"}, time_filter
-    )
+    return await db.find(collection, {"key": "topics_by_media_source"}, time_filter)
