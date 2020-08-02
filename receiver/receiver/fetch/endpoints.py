@@ -16,7 +16,7 @@ facebook = [
     {
         "type": "js",
         "url": "ads_top10.js",
-        "key": "ads",
+        "key": "ads_by_advertiser",
         "func": partial(transform_items_js, keys=["advertiser", "count"]),
     },
     {

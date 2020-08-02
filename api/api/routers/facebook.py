@@ -15,7 +15,7 @@ collection = "facebook"
     "",
     response_model=List[
         Union[
-            models.FacebookAdsResponse,
+            models.FacebookAdsByAdvertiserResponse,
             models.FacebookAdsImpressionsResponse,
             models.FacebookAdsRegionsResponse,
             models.FacebookAdsCountResponse,
@@ -31,16 +31,35 @@ async def facebook(
     return await db.find(collection, {}, time_filter)
 
 
-@router.get("/ads", response_model=List[models.FacebookAdsResponse])
+@router.get(
+    "/ads",
+    response_model=List[
+        Union[
+            models.FacebookAdsByAdvertiserResponse,
+            models.FacebookAdsImpressionsResponse,
+            models.FacebookAdsRegionsResponse,
+            models.FacebookAdsCountResponse,
+        ]
+    ],
+)
 async def facebook_ads(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
-    print(db.find(collection, {"key": "ads"}, time_filter))
-    return await db.find(collection, {"key": "ads"}, time_filter)
+    keys_ads = ["ads_by_advertiser", "ads_impressions", "ads_regions", "ads_count"]
+    return await db.find(collection, {"key": {"$in": keys_ads}}, time_filter)
 
 
 @router.get(
-    "/ads_impressions", response_model=List[models.FacebookAdsImpressionsResponse]
+    "/ads/by_advertiser", response_model=List[models.FacebookAdsByAdvertiserResponse]
+)
+async def facebook_ads_by_advertiser(
+    db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
+):
+    return await db.find(collection, {"key": "ads_by_advertiser"}, time_filter)
+
+
+@router.get(
+    "/ads/impressions", response_model=List[models.FacebookAdsImpressionsResponse]
 )
 async def facebook_ads_impressions(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
@@ -48,14 +67,14 @@ async def facebook_ads_impressions(
     return await db.find(collection, {"key": "ads_impressions"}, time_filter)
 
 
-@router.get("/ads_regions", response_model=List[models.FacebookAdsRegionsResponse])
+@router.get("/ads/regions", response_model=List[models.FacebookAdsRegionsResponse])
 async def facebook_ads_regions(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "ads_regions"}, time_filter)
 
 
-@router.get("/ads_count", response_model=List[models.FacebookAdsCountResponse])
+@router.get("/ads/count", response_model=List[models.FacebookAdsCountResponse])
 async def facebook_ads_count(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
