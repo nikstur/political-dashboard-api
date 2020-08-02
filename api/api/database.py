@@ -9,18 +9,22 @@ from motor.motor_asyncio import (
 
 
 class DataBase:
-    def __init__(self) -> None:
-        self.hostname: str = os.getenv("DB_HOSTNAME", "db")
+    db_name: str = ""
+
+    def __init__(self, client: AsyncIOMotorClient) -> None:
+        self.client: AsyncIOMotorClient = client
 
     def connect(self) -> None:
-        self._get_client()
-        self._get_db()
+        self.db: AsyncIOMotorDatabase = self.client[self.db_name]
+        print(f"Connected to database: {self.db_name}")
 
-    def _get_client(self) -> None:
-        self.client: AsyncIOMotorClient = AsyncIOMotorClient(host=self.hostname)
+    def disconnect(self) -> None:
+        self.client.close()
+        print(f"Disconnected from database: {self.db_name}")
 
-    def _get_db(self) -> None:
-        self.db: AsyncIOMotorDatabase = self.client["database"]
+
+class DBContent(DataBase):
+    db_name: str = "content"
 
     async def find(self, collection_name: str, *filters: Dict) -> List[Dict]:
         """Find data and clean it"""
@@ -31,6 +35,7 @@ class DataBase:
         return docs
 
     def combine_filters(self, *filters: Dict) -> Dict:
+        """Combine multiple filters into one"""
         base_filter = filters[0]
         for f in filters[1:]:
             if f:
@@ -43,8 +48,26 @@ class DataBase:
         doc["date"] = doc["date"].date()
         return doc
 
-    def disconnect(self) -> None:
-        self.client.close()
+
+class DBAdmin(DataBase):
+    db_name: str = "administration"
+
+    async def find(self, collection_name: str, identifier: int) -> Dict:
+        collection: AsyncIOMotorClient = self.db[collection_name]
+        doc: Dict = await collection.find_one({"identifier": identifier})
+        return doc
+
+    async def count(self, collection_name: str) -> int:
+        collection: AsyncIOMotorClient = self.db[collection_name]
+        doc_count: int = await collection.count_documents({})
+        return doc_count
+
+    async def insert(self, collection_name: str, doc: Dict) -> None:
+        collection: AsyncIOMotorClient = self.db[collection_name]
+        await collection.insert_one(doc)
 
 
-database = DataBase()
+hostname: str = os.getenv("DB_HOSTNAME", "db")
+client: AsyncIOMotorClient = AsyncIOMotorClient(host=hostname)
+db_content: DBContent = DBContent(client)
+db_admin: DBAdmin = DBAdmin(client)

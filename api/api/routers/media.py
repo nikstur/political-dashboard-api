@@ -3,8 +3,8 @@ from typing import Dict, List, Union
 from fastapi import APIRouter, Depends
 
 from .. import models
-from ..database import DataBase
-from ..dependencies import db_connection, time_query
+from ..database import DBContent
+from ..dependencies import db_content_conn, time_query
 
 router = APIRouter()
 
@@ -23,28 +23,28 @@ collection = "media"
     ],
 )
 async def media(
-    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
+    db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {}, time_filter)
 
 
 @router.get("/urls", response_model=List[models.URLsResponse])
 async def media_urls(
-    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
+    db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"data_type": "urls"}, time_filter)
 
 
 @router.get("/attention", response_model=List[models.MediaAttentionResponse])
 async def media_attention(
-    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
+    db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"data_type": "attention"}, time_filter)
 
 
 @router.get("/topics", response_model=List[models.MediaTopicsResponse])
 async def media_topics(
-    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
+    db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"data_type": "topics"}, time_filter)
 
@@ -54,7 +54,7 @@ async def media_topics(
     response_model=List[models.MediaTopicyByMediaSourceResponse],
 )
 async def media_topics_by_media_source(
-    db: DataBase = Depends(db_connection), time_filter: Dict = Depends(time_query)
+    db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(
         collection, {"data_type": "topics_by_media_source"}, time_filter
