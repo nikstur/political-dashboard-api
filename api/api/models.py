@@ -20,6 +20,16 @@ class URLsResponse(BaseResponse):
     items: List[URLsResponseBody]
 
 
+# Administration
+
+
+class AdministrationCreateKeyResponse(BaseModel):
+    identifier: int = Field(..., example=5)
+    can_create_token: bool = Field(..., example=False)
+    created_by: int = Field(..., example=1)
+    new_api_key: str = Field(..., example="5-0f63e1c9f67b0dd10kc5a309f98d7464")
+
+
 # Facebook
 
 

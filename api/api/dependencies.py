@@ -1,15 +1,21 @@
 from datetime import date, datetime, time
-from typing import Dict, Union
+from typing import Dict, Optional
 
-from fastapi import Query
+from fastapi import Depends, Query, Security
+from fastapi.security import APIKeyHeader
+from passlib.hash import bcrypt
+from starlette.exceptions import HTTPException
+from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 
-from . import database
+from .database import DBAdmin, DBContent, db_admin, db_content
+
+# Time
 
 
 async def time_query(
     start_date: date = Query(None, description="Start date in UTC (ISO 8601)"),
     end_date: date = Query(None, description="End date in UTC (ISO 8601)"),
-) -> Union[Dict[str, Dict[str, datetime]], None]:
+) -> Optional[Dict[str, Dict[str, datetime]]]:
     if not start_date or not end_date:
         return None
     else:
@@ -19,5 +25,63 @@ async def time_query(
         return time_filter
 
 
-def db_connection() -> database.DataBase:
-    return database.database
+# Databases
+
+
+def db_content_conn() -> DBContent:
+    return db_content
+
+
+def db_admin_conn() -> DBAdmin:
+    return db_admin
+
+
+# Security
+
+
+async def api_key_query(
+    api_key: str = Security(APIKeyHeader(name="X-API-Key")),
+    db: DBAdmin = Depends(db_admin_conn),
+):
+    is_verified = await verify_key_hash(api_key, db)
+    if not is_verified:
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED, detail="Not authenticated"
+        )
+    else:
+        return api_key
+
+
+async def verify_key_hash(api_key: str, db: DBAdmin) -> bool:
+    identifier_str, key = api_key.split("-")
+    identifier = int(identifier_str)
+    doc = await db.find("api_keys", identifier)
+    if doc:
+        key_hash = doc["hash"]
+        is_verified = bool(key_hash and bcrypt.verify(key, key_hash))
+        return is_verified
+    else:
+        return False
+
+
+async def admin_api_key_query(
+    api_key: str = Depends(api_key_query), db: DBAdmin = Depends(db_admin_conn)
+):
+    can_create_token: bool = await verify_can_create_token(api_key, db)
+    if can_create_token:
+        return api_key
+    else:
+        raise HTTPException(
+            status_code=HTTP_403_FORBIDDEN,
+            detail="Insufficient rights to access this resource",
+        )
+
+
+async def verify_can_create_token(api_key: str, db: DBAdmin) -> bool:
+    identifier: int = int(api_key.split("-")[0])
+    doc: Dict = await db.find("api_keys", identifier)
+    if doc:
+        can_create_token: bool = doc["can_create_token"]
+        return can_create_token
+    else:
+        return False

@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.responses import ORJSONResponse
 
-from .database import database
-from .routers import facebook, media, twitter
+from .database import db_admin, db_content
+from .dependencies import api_key_query
+from .routers import administration, facebook, media, twitter
 
 app = FastAPI(
     title="API for political-dashboard.com",
@@ -11,19 +12,28 @@ app = FastAPI(
     docs_url="/",
     redoc_url=None,
     default_response_class=ORJSONResponse,
+    on_startup=[db_content.connect, db_admin.connect],
+    on_shutdown=[db_content.disconnect, db_admin.disconnect],
 )
 
+app.include_router(
+    administration.router, prefix="/administration", tags=["Administration"]
+)
 
-@app.on_event("startup")
-def startup():
-    database.connect()
+app.include_router(
+    facebook.router,
+    prefix="/facebook",
+    tags=["Facebook"],
+    dependencies=[Depends(api_key_query)],
+)
 
+app.include_router(
+    media.router, prefix="/media", tags=["Media"], dependencies=[Depends(api_key_query)]
+)
 
-@app.on_event("shutdown")
-def shutdown():
-    database.disconnect()
-
-
-app.include_router(facebook.router, prefix="/facebook", tags=["Facebook"])
-app.include_router(media.router, prefix="/media", tags=["Media"])
-app.include_router(twitter.router, prefix="/twitter", tags=["Twitter"])
+app.include_router(
+    twitter.router,
+    prefix="/twitter",
+    tags=["Twitter"],
+    dependencies=[Depends(api_key_query)],
+)

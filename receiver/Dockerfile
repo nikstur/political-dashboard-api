@@ -22,3 +22,4 @@ ENV PATH="/home/appuser/venv/bin:$PATH"
 COPY receiver/ receiver/
 
 ENTRYPOINT [ "python", "-m", "receiver.main" ]
+CMD [ "continual" ]

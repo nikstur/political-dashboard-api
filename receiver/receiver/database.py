@@ -1,14 +1,14 @@
 import os
 
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+from pymongo import MongoClient
+from pymongo.database import Database
 
 db_hostname = os.getenv("DB_HOSTNAME", "db")
-print(f"{db_hostname=}")
+client: MongoClient = MongoClient(host=db_hostname)
+print(f"Connected to database: {db_hostname}")
 
 
-def setup(drop_all: bool = False) -> AsyncIOMotorDatabase:
-    client = AsyncIOMotorClient(host=db_hostname)
-    db = client["database"]
-    if drop_all:
-        client.drop_database("database")
+def setup(db_name) -> Database:
+    client.drop_database(db_name)
+    db = client[db_name]
     return db

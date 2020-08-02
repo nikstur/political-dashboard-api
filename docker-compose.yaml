@@ -3,6 +3,7 @@ services:
   receiver:
     build: ./receiver
     init: true
+    command: ['initial']
     depends_on:
       - db
     # restart: always
