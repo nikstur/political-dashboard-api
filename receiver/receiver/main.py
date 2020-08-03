@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime, timezone
 from functools import partial
 from typing import Dict
 
@@ -30,10 +31,11 @@ async def initial_setup() -> None:
 async def insert_initial_api_key():
     db_admin = database.setup("administration")
     initial_api_key: Dict = {
-        "identifier": 1,
+        "_id": 1,
         "hash": "$2b$12$7pmPKz6uqV5DIFR7b7R0IuWXND0WdPQDM/1neOf.oTJXclqPd.ReW",
         "can_create_token": True,
         "created_by": 0,
+        "creation_date": datetime.now(timezone.utc),
     }
     db_admin.api_keys.insert_one(initial_api_key)
 

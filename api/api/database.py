@@ -1,11 +1,12 @@
 import os
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from motor.motor_asyncio import (
     AsyncIOMotorClient,
     AsyncIOMotorCursor,
     AsyncIOMotorDatabase,
 )
+from pymongo.results import InsertOneResult
 
 
 class DataBase:
@@ -54,17 +55,39 @@ class DBAdmin(DataBase):
 
     async def find(self, collection_name: str, identifier: int) -> Dict:
         collection: AsyncIOMotorClient = self.db[collection_name]
-        doc: Dict = await collection.find_one({"identifier": identifier})
-        return doc
+        doc: Dict = await collection.find_one({"_id": identifier})
+        return self.adjust_identifier(doc)
 
     async def count(self, collection_name: str) -> int:
         collection: AsyncIOMotorClient = self.db[collection_name]
         doc_count: int = await collection.count_documents({})
         return doc_count
 
-    async def insert(self, collection_name: str, doc: Dict) -> None:
+    async def insert(self, collection_name: str, doc: Dict) -> Dict:
         collection: AsyncIOMotorClient = self.db[collection_name]
-        await collection.insert_one(doc)
+        result: InsertOneResult = await collection.insert_one(doc)
+        inserted_doc: Dict = await collection.find_one(result.inserted_id)
+        return self.adjust_identifier(inserted_doc)
+
+    async def delete(self, collection_name: str, identifier: int) -> Optional[Dict]:
+        collection: AsyncIOMotorClient = self.db[collection_name]
+        doc: Dict = await collection.find_one_and_delete({"_id": identifier})
+        return self.adjust_identifier(doc)
+
+    async def get_all(self, collection_name: str) -> List[Dict]:
+        collection: AsyncIOMotorClient = self.db[collection_name]
+        cursor = collection.find({}).sort("_id")
+        docs: List[Dict] = [self.clean_doc(doc) async for doc in cursor]
+        return docs
+
+    def adjust_identifier(self, doc: Dict) -> Dict:
+        doc["identifier"] = doc.pop("_id")
+        return doc
+
+    def clean_doc(self, doc: Dict) -> Dict:
+        cleaned_doc = self.adjust_identifier(doc)
+        cleaned_doc.pop("hash")
+        return cleaned_doc
 
 
 hostname: str = os.getenv("DB_HOSTNAME", "db")
