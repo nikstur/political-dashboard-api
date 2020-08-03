@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "cli"
+name = "pdactl"
 version = "0.1.0"
 description = ""
 authors = ["nikstur <nikstur@outlook.com>"]
@@ -7,6 +7,7 @@ authors = ["nikstur <nikstur@outlook.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 typer = "^0.3.1"
+requests = "^2.24.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -15,6 +16,9 @@ flake8 = "^3.8.3"
 isort = {extras = ["pyproject"], version = "^5.2.2"}
 mypy = "^0.782"
 bandit = "^1.6.2"
+
+[tool.poetry.scripts]
+pdactl = "pdactl.main:app"
 
 [build-system]
 requires = ["poetry>=0.12"]

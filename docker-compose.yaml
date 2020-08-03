@@ -16,6 +16,8 @@ services:
   api:
     build: ./api
     init: true
+    environment:
+      PDA_DEV_CONFIG: 1
     depends_on:
       - receiver
       - db
