@@ -16,21 +16,19 @@ app = FastAPI(
     on_shutdown=[db_content.disconnect, db_admin.disconnect],
 )
 
+
 app.include_router(
     administration.router, prefix="/administration", tags=["Administration"]
 )
-
 app.include_router(
     facebook.router,
     prefix="/facebook",
     tags=["Facebook"],
     dependencies=[Depends(api_key_query)],
 )
-
 app.include_router(
     media.router, prefix="/media", tags=["Media"], dependencies=[Depends(api_key_query)]
 )
-
 app.include_router(
     twitter.router,
     prefix="/twitter",
