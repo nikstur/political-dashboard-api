@@ -17,7 +17,7 @@ Inside the directory, start all services.
 docker-compose up --build
 ```
 
-Navigate to `localhost:8000/docs` to see the generated swagger documentation of the API.
+Navigate to `localhost:8000` to see the generated swagger documentation of the API.
 
 ## Development
 
