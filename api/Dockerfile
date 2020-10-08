@@ -9,8 +9,10 @@ RUN pip install -r /tmp/requirements.txt
 
 FROM python:3.8-slim-buster
 
-COPY update-packages.sh .
-RUN chmod +x ./update-packages.sh && ./update-packages.sh
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
