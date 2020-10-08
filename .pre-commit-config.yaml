@@ -1,52 +1,56 @@
 repos:
   - repo: https://github.com/psf/black
-    rev: stable
+    rev: 20.8b1
     hooks:
       - id: black
 
   - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.8
+    rev: 3.8.4
     hooks:
       - id: flake8
         args:
           [
-            "--max-line-length=88",
-            "--ignore=E203,E501,W503",
-            "--per-file-ignores=__init__.py:F401",
+            '--max-line-length=88',
+            '--ignore=E203,E501,W503',
+            '--per-file-ignores=__init__.py:F401',
           ]
 
   - repo: https://github.com/timothycrosley/isort
-    rev: 4.3.21-2
+    rev: 5.5.4
     hooks:
       - id: isort
         args:
           [
-            "--line-width",
-            "88",
-            "--multi-line",
-            "3",
-            "--trailing-comma",
-            "--use-parentheses",
+            '--line-width',
+            '88',
+            '--multi-line',
+            '3',
+            '--trailing-comma',
+            '--use-parentheses',
           ]
         additional_dependencies: [toml]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v3.2.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: debug-statements
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.770
+    rev: v0.782
     hooks:
       - id: mypy
         exclude: tests/
         additional_dependencies:
           [
-            fastapi==0.54.1,
-            motor==2.1.0,
-            uvicorn==0.11.5,
-            fastapi==0.54.1,
-            uvicorn==0.11.5,
+            'fastapi==0.61.1',
+            'motor==2.3.0',
+            'uvicorn==0.12.1',
+            'passlib==1.7.3',
+            'orjson==3.4.0',
+            'aiohttp==3.6.2',
+            'typer==0.3.2',
+            'requests==2.24.0',
+            'pydantic==1.6.1',
           ]
