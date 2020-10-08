@@ -14,9 +14,9 @@ jobs:
 
       - name: Set Python Version Env Variable
         run: |
-          echo PYTHON_VERSION<<EOF >> $GITHUB_ENV
+          echo "PYTHON_VERSION<<EOF" >> $GITHUB_ENV
           python -c "import sys; print('-'.join(str(v) for v in sys.version_info))" >> $GITHUB_ENV
-          echo EOF >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - uses: actions/cache@v2
         with:
@@ -40,9 +40,9 @@ jobs:
 
       - name: Set Python Version Env Variable
         run: |
-          echo PYTHON_VERSION<<EOF >> $GITHUB_ENV
+          echo "PYTHON_VERSION<<EOF" >> $GITHUB_ENV
           python -c "import sys; print('-'.join(str(v) for v in sys.version_info))" >> $GITHUB_ENV
-          echo EOF >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Install Poetry
         shell: bash
