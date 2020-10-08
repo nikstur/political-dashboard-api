@@ -26,7 +26,8 @@ collection = "facebook"
     ],
 )
 async def facebook(
-    db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query),
+    db: DBContent = Depends(db_content_conn),
+    time_filter: Dict = Depends(time_query),
 ):
     return await db.find(collection, {}, time_filter)
 
@@ -82,7 +83,8 @@ async def facebook_ads_count(
 
 
 @router.get(
-    "/reactions", response_model=List[models.FacebookReactionsReponse],
+    "/reactions",
+    response_model=List[models.FacebookReactionsReponse],
 )
 async def facebook_reactions(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
@@ -91,7 +93,8 @@ async def facebook_reactions(
 
 
 @router.get(
-    "/sentiment", response_model=List[models.FacebookSentimentResponse],
+    "/sentiment",
+    response_model=List[models.FacebookSentimentResponse],
 )
 async def facebook_sentiment(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
@@ -100,7 +103,8 @@ async def facebook_sentiment(
 
 
 @router.get(
-    "/posts", response_model=List[models.SimpleFacebookResponse],
+    "/posts",
+    response_model=List[models.SimpleFacebookResponse],
 )
 async def facebook_posts(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
@@ -109,7 +113,8 @@ async def facebook_posts(
 
 
 @router.get(
-    "/shares", response_model=List[models.SimpleFacebookResponse],
+    "/shares",
+    response_model=List[models.SimpleFacebookResponse],
 )
 async def facebook_shares(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)
@@ -118,7 +123,8 @@ async def facebook_shares(
 
 
 @router.get(
-    "/likes", response_model=List[models.SimpleFacebookResponse],
+    "/likes",
+    response_model=List[models.SimpleFacebookResponse],
 )
 async def facebook_likes(
     db: DBContent = Depends(db_content_conn), time_filter: Dict = Depends(time_query)

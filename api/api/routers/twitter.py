@@ -29,10 +29,12 @@ async def twitter(
 
 
 @router.get(
-    "/urls", response_model=List[models.URLsResponse],
+    "/urls",
+    response_model=List[models.URLsResponse],
 )
 async def twitter_urls(
-    db: DBContent = Depends(db_content_conn), time_query: Dict = Depends(time_query),
+    db: DBContent = Depends(db_content_conn),
+    time_query: Dict = Depends(time_query),
 ):
     return await db.find(collection, {"key": "urls"}, time_query)
 
@@ -52,9 +54,11 @@ async def twitter_hashtags(
 
 
 @router.get(
-    "/hashtags_by_party", response_model=List[models.TwitterHashtagsByPartyResponse],
+    "/hashtags_by_party",
+    response_model=List[models.TwitterHashtagsByPartyResponse],
 )
 async def twitter_hashtags_by_party(
-    db: DBContent = Depends(db_content_conn), time_query: Dict = Depends(time_query),
+    db: DBContent = Depends(db_content_conn),
+    time_query: Dict = Depends(time_query),
 ):
     return await db.find(collection, {"key": "hashtags_by_party"}, time_query)
