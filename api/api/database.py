@@ -9,19 +9,25 @@ from motor.motor_asyncio import (
 from pymongo.results import InsertOneResult
 
 
+class DataBaseConnection:
+    def connect(self) -> None:
+        hostname = os.getenv("DB_HOSTNAME", "db")
+        self.client = AsyncIOMotorClient(host=hostname)
+        self.db_content = DBContent(self.client)
+        self.db_admin = DBAdmin(self.client)
+        print("Connected to database")
+
+    def disconnect(self) -> None:
+        self.client.close()
+        print("Disconnected from database")
+
+
 class DataBase:
     db_name: str = ""
 
     def __init__(self, client: AsyncIOMotorClient) -> None:
         self.client: AsyncIOMotorClient = client
-
-    def connect(self) -> None:
         self.db: AsyncIOMotorDatabase = self.client[self.db_name]
-        print(f"Connected to database: {self.db_name}")
-
-    def disconnect(self) -> None:
-        self.client.close()
-        print(f"Disconnected from database: {self.db_name}")
 
 
 class DBContent(DataBase):
@@ -90,7 +96,4 @@ class DBAdmin(DataBase):
         return cleaned_doc
 
 
-hostname: str = os.getenv("DB_HOSTNAME", "db")
-client: AsyncIOMotorClient = AsyncIOMotorClient(host=hostname)
-db_content: DBContent = DBContent(client)
-db_admin: DBAdmin = DBAdmin(client)
+database_connection = DataBaseConnection()
