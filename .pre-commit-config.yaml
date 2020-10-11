@@ -15,10 +15,11 @@ repos:
             '--per-file-ignores=__init__.py:F401',
           ]
 
-  - repo: https://github.com/timothycrosley/isort
+  - repo: https://github.com/PyCQA/isort
     rev: 5.5.4
     hooks:
       - id: isort
+        exclude: tests/
         args:
           [
             '--line-width',
@@ -28,7 +29,6 @@ repos:
             '--trailing-comma',
             '--use-parentheses',
           ]
-        additional_dependencies: [toml]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
