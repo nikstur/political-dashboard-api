@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 from fastapi.responses import ORJSONResponse
 
-from .database import db_admin, db_content
+from .database import database_connection
 from .dependencies import api_key_query
 from .routers import administration, facebook, media, twitter
 
@@ -12,8 +12,8 @@ app = FastAPI(
     docs_url="/",
     redoc_url=None,
     default_response_class=ORJSONResponse,
-    on_startup=[db_content.connect, db_admin.connect],
-    on_shutdown=[db_content.disconnect, db_admin.disconnect],
+    on_startup=[database_connection.connect],
+    on_shutdown=[database_connection.disconnect],
 )
 
 
