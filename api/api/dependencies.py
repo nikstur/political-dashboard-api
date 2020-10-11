@@ -24,7 +24,7 @@ async def time_query(
         end_date += timedelta(days=1)
         time_delta = end_date - start_date
         if time_delta.days <= 10:
-            time_filter = construct_filter_from_date(start_date, end_date)
+            time_filter = _construct_filter_from_date(start_date, end_date)
             return time_filter
         else:
             raise HTTPException(
@@ -33,13 +33,13 @@ async def time_query(
             )
 
 
-def construct_filter_from_date(start_date: date, end_date: date) -> dict:
-    start_datetime, end_datetime = transform_date_to_datetime(start_date, end_date)
-    time_filter = construct_filter_from_datetimes(start_datetime, end_datetime)
+def _construct_filter_from_date(start_date: date, end_date: date) -> dict:
+    start_datetime, end_datetime = _transform_date_to_datetime(start_date, end_date)
+    time_filter = _construct_filter_from_datetimes(start_datetime, end_datetime)
     return time_filter
 
 
-def transform_date_to_datetime(
+def _transform_date_to_datetime(
     start_date: date, end_date: date
 ) -> Tuple[datetime, datetime]:
     start_datetime = datetime.combine(start_date, time())
@@ -47,7 +47,7 @@ def transform_date_to_datetime(
     return start_datetime, end_datetime
 
 
-def construct_filter_from_datetimes(
+def _construct_filter_from_datetimes(
     start_datetime: datetime, end_datetime: datetime
 ) -> dict:
     time_filter = {"date": {"$gte": start_datetime, "$lt": end_datetime}}
