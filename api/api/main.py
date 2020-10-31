@@ -1,9 +1,8 @@
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from .database import database_connection
-from .dependencies import api_key_query
-from .routers import administration, facebook, media, twitter
+from .routers import facebook, media, twitter
 
 app = FastAPI(
     title="API for political-dashboard.com",
@@ -18,20 +17,13 @@ app = FastAPI(
 
 
 app.include_router(
-    administration.router, prefix="/administration", tags=["Administration"]
-)
-app.include_router(
     facebook.router,
     prefix="/facebook",
     tags=["Facebook"],
-    dependencies=[Depends(api_key_query)],
 )
-app.include_router(
-    media.router, prefix="/media", tags=["Media"], dependencies=[Depends(api_key_query)]
-)
+app.include_router(media.router, prefix="/media", tags=["Media"])
 app.include_router(
     twitter.router,
     prefix="/twitter",
     tags=["Twitter"],
-    dependencies=[Depends(api_key_query)],
 )
