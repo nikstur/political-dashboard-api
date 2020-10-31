@@ -20,20 +20,6 @@ class URLsResponse(BaseResponse):
     items: List[URLsResponseBody]
 
 
-# Administration
-
-
-class AdministrationKeyResponse(BaseModel):
-    identifier: int = Field(..., example=5)
-    can_create_token: bool = Field(..., example=False)
-    created_by: int = Field(..., example=1)
-    creation_date: datetime.datetime = Field(..., example=datetime.datetime.utcnow())
-
-
-class AdministrationAddKeyResponse(AdministrationKeyResponse):
-    new_api_key: str = Field(..., example="5-0f63e1c9f67b0dd10kc5a309f98d7464")
-
-
 # Facebook
 
 
