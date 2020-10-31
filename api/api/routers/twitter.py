@@ -3,8 +3,8 @@ from typing import Dict, List, Union
 from fastapi import APIRouter, Depends, Query
 
 from .. import models
-from ..database import DBContent
-from ..dependencies import db_content_conn, time_query
+from ..database import DataBase
+from ..dependencies import db_conn, time_query
 
 router = APIRouter()
 
@@ -23,7 +23,7 @@ collection = "twitter"
     response_model_exclude_unset=True,
 )
 async def twitter(
-    db: DBContent = Depends(db_content_conn), time_query: Dict = Depends(time_query)
+    db: DataBase = Depends(db_conn), time_query: Dict = Depends(time_query)
 ):
     return await db.find(collection, {}, time_query)
 
@@ -33,7 +33,7 @@ async def twitter(
     response_model=List[models.URLsResponse],
 )
 async def twitter_urls(
-    db: DBContent = Depends(db_content_conn),
+    db: DataBase = Depends(db_conn),
     time_query: Dict = Depends(time_query),
 ):
     return await db.find(collection, {"key": "urls"}, time_query)
@@ -45,7 +45,7 @@ async def twitter_urls(
     response_model_exclude_unset=True,
 )
 async def twitter_hashtags(
-    db: DBContent = Depends(db_content_conn),
+    db: DataBase = Depends(db_conn),
     time_query: Dict = Depends(time_query),
     party: str = Query(None, description="Abbreviated name of party", min_length=3),
 ):
@@ -58,7 +58,7 @@ async def twitter_hashtags(
     response_model=List[models.TwitterHashtagsByPartyResponse],
 )
 async def twitter_hashtags_by_party(
-    db: DBContent = Depends(db_content_conn),
+    db: DataBase = Depends(db_conn),
     time_query: Dict = Depends(time_query),
 ):
     return await db.find(collection, {"key": "hashtags_by_party"}, time_query)

@@ -30,7 +30,7 @@ async def read_and_insert_from_files() -> None:
 
 
 async def download_and_insert_from_endpoints() -> None:
-    db_content = database.setup("content")
+    db_content = database.setup("database")
 
     async with aiohttp.ClientSession(headers={"Connection": "keep-alive"}) as session:
         fetch_endpoints = partial(fetch_all_endpoints, session=session)
