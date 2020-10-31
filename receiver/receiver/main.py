@@ -1,7 +1,5 @@
 import asyncio
-from datetime import datetime, timezone
 from functools import partial
-from typing import Dict
 
 import aiohttp
 import typer
@@ -23,21 +21,12 @@ def continual() -> None:
 
 
 async def initial_setup() -> None:
-    await insert_initial_api_key()
     await read_and_insert_from_files()
     await download_and_insert_from_endpoints()
 
 
-async def insert_initial_api_key():
-    db_admin = database.setup("administration")
-    initial_api_key: Dict = {
-        "_id": 1,
-        "hash": "$2b$12$7pmPKz6uqV5DIFR7b7R0IuWXND0WdPQDM/1neOf.oTJXclqPd.ReW",
-        "can_create_token": True,
-        "created_by": 0,
-        "creation_date": datetime.now(timezone.utc),
-    }
-    db_admin.api_keys.insert_one(initial_api_key)
+async def read_and_insert_from_files() -> None:
+    pass
 
 
 async def download_and_insert_from_endpoints() -> None:
@@ -52,10 +41,6 @@ async def download_and_insert_from_endpoints() -> None:
     db_content.facebook.insert_many(facebook_data)
     db_content.media.insert_many(media_data)
     db_content.twitter.insert_many(twitter_data)
-
-
-async def read_and_insert_from_files() -> None:
-    pass
 
 
 if __name__ == "__main__":
