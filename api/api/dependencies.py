@@ -4,7 +4,7 @@ from typing import Optional, Tuple
 from fastapi import Query
 from starlette.exceptions import HTTPException
 
-from .database import DBAdmin, DBContent, database_connection
+from .database import DataBase, database_connection
 
 # Time
 
@@ -55,9 +55,5 @@ def _construct_filter_from_datetimes(
 # Databases
 
 
-def db_content_conn() -> DBContent:
-    return database_connection.db_content
-
-
-def db_admin_conn() -> DBAdmin:
-    return database_connection.db_admin
+def db_conn() -> DataBase:
+    return database_connection.db
