@@ -21,7 +21,7 @@ USER appuser
 COPY --from=builder /opt/venv/ /home/appuser/venv/
 ENV PATH="/home/appuser/venv/bin:$PATH"
 
-COPY ./api/ api/
+COPY api/ api/
 
 EXPOSE 8000
 ENTRYPOINT python -m uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
