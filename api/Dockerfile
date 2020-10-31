@@ -14,10 +14,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-EXPOSE 8000
-
 RUN useradd --create-home appuser
 WORKDIR /home/appuser/
 USER appuser
@@ -27,4 +23,5 @@ ENV PATH="/home/appuser/venv/bin:$PATH"
 
 COPY ./api/ api/
 
-ENTRYPOINT [ "sh", "/entrypoint.sh" ]
+EXPOSE 8000
+ENTRYPOINT python -m uvicorn api.main:app --reload --host 0.0.0.0 --port 8000

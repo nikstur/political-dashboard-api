@@ -1,5 +1,3 @@
 *
 !api/
 !requirements.txt
-!entrypoint.sh
-!update-packages.sh
