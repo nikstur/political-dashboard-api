@@ -1,4 +1,4 @@
-from receiver import __version__
+from ingester import __version__
 
 
 def test_version():
