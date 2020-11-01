@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "receiver"
+name = "ingester"
 version = "0.1.0"
 description = ""
 authors = ["Niklas Sturm"]
