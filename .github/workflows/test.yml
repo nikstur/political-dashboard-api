@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        directory: [receiver/, api/]
+        directory: [ingester/, api/]
     steps:
       - uses: actions/checkout@v2
 
@@ -48,7 +48,7 @@ jobs:
         shell: bash
         run: |
           curl -fsS -o get-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
-          python get-poetry.py --preview -y
+          python get-poetry.py -y
           echo "$HOME/.poetry/bin" >> $GITHUB_PATH
 
       - name: Configure poetry
