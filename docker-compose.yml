@@ -1,7 +1,7 @@
 version: '3.8'
 services:
-  receiver:
-    build: ./receiver
+  ingester:
+    build: ./ingester
     init: true
     command: ['initial']
     depends_on:
@@ -19,7 +19,7 @@ services:
     environment:
       PDA_DEV_CONFIG: 1
     depends_on:
-      - receiver
+      - ingester
       - db
     ports:
       - '8000:8000'

@@ -21,7 +21,7 @@ USER appuser
 COPY --from=builder /opt/venv /home/appuser/venv
 ENV PATH="/home/appuser/venv/bin:$PATH"
 
-COPY receiver/ receiver/
+COPY ingester/ ingester/
 
-ENTRYPOINT [ "python", "-m", "receiver.main" ]
+ENTRYPOINT [ "python", "-m", "ingester.main" ]
 CMD [ "initial" ]
