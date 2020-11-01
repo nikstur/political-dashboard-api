@@ -1,14 +1,26 @@
 import os
+from contextlib import contextmanager
 
-from pymongo import MongoClient
-from pymongo.database import Database
-
-db_hostname = os.getenv("DB_HOSTNAME", "db")
-client: MongoClient = MongoClient(host=db_hostname)
-print(f"Connected to database: {db_hostname}")
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 
-def setup(db_name) -> Database:
-    client.drop_database(db_name)
-    db = client[db_name]
-    return db
+@contextmanager
+def database_connection():
+    try:
+        database_connection = DataBaseConnection()
+        database_connection.connect()
+        yield database_connection
+    finally:
+        database_connection.disconnect()
+
+
+class DataBaseConnection:
+    def connect(self):
+        hostname = os.getenv("DB_HOSTNAME", "db")
+        self.client = AsyncIOMotorClient(host=hostname)
+        self.db: AsyncIOMotorDatabase = self.client["database"]
+        print("Connected to database")
+
+    def disconnect(self):
+        self.client.close()
+        print("Disconnected from database")
