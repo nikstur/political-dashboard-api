@@ -1,6 +1,6 @@
-name: test
+name: build
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   pre-commit:
@@ -25,12 +25,12 @@ jobs:
 
       - uses: pre-commit/action@v2.0.0
 
-  tests:
+  test:
     needs: pre-commit
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        directory: [ingester/, api/]
+        directory: [ingester, api]
     steps:
       - uses: actions/checkout@v2
 
@@ -56,7 +56,7 @@ jobs:
 
       - name: Set up Cache
         env:
-          LOCK_FILE: ${{ matrix.directory }}poetry.lock
+          LOCK_FILE: ${{ matrix.directory }}/poetry.lock
         uses: actions/cache@v2
         with:
           path: ${{ matrix.directory }}/.venv
@@ -69,3 +69,19 @@ jobs:
       - name: Run pytest
         working-directory: ${{ matrix.directory }}
         run: poetry run pytest -q -p no:warnings tests
+
+  build:
+    needs: [pre-commit, test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: [ingester, api]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: docker/setup-buildx-action@v1
+
+      - uses: docker/build-push-action@v2
+        with:
+          context: ${{ matrix.directory }}
+          file: ${{ matrix.directory }}/Dockerfile

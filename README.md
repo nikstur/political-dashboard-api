@@ -1,6 +1,6 @@
 # REST-API for `political-dashboard.com`
 
-![test badge](https://github.com/nikstur/political-dashboard-api/workflows/test/badge.svg)
+![build badge](https://github.com/nikstur/political-dashboard-api/workflows/build/badge.svg)
 
 ## Quick Start
 
