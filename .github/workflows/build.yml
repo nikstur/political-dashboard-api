@@ -1,4 +1,4 @@
-name: test
+name: build
 
 on: [push, pull_request]
 
@@ -25,7 +25,7 @@ jobs:
 
       - uses: pre-commit/action@v2.0.0
 
-  tests:
+  test:
     needs: pre-commit
     runs-on: ubuntu-latest
     strategy:
@@ -69,3 +69,18 @@ jobs:
       - name: Run pytest
         working-directory: ${{ matrix.directory }}
         run: poetry run pytest -q -p no:warnings tests
+
+  build:
+    needs: [pre-commit, tests]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: [ingester/, api/]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: docker/setup-buildx-action@v1
+
+      - uses: docker/build-push-action@v2
+        with:
+          context: ${{ workflow.directory }}
