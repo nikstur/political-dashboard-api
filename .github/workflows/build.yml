@@ -1,6 +1,6 @@
 name: build
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   pre-commit:
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        directory: [ingester/, api/]
+        directory: [ingester, api]
     steps:
       - uses: actions/checkout@v2
 
@@ -56,7 +56,7 @@ jobs:
 
       - name: Set up Cache
         env:
-          LOCK_FILE: ${{ matrix.directory }}poetry.lock
+          LOCK_FILE: ${{ matrix.directory }}/poetry.lock
         uses: actions/cache@v2
         with:
           path: ${{ matrix.directory }}/.venv
@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        directory: [ingester/, api/]
+        directory: [ingester, api]
     steps:
       - uses: actions/checkout@v2
 
