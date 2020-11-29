@@ -71,7 +71,7 @@ jobs:
         run: poetry run pytest -q -p no:warnings tests
 
   build:
-    needs: [pre-commit, tests]
+    needs: [pre-commit, test]
     runs-on: ubuntu-latest
     strategy:
       matrix:
