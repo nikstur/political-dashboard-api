@@ -14,7 +14,7 @@ Clone the repository
 Inside the directory, build and start all services
 
 ```bash
-docker-compose up --build
+docker-compose -f compose.yml -f compose.dev.yml up --build
 ```
 
 Navigate to `api.political-dashboard.localhost` to see the generated SwaggerUI

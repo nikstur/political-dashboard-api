@@ -1,0 +1,12 @@
+services:
+  traefik:
+    environment:
+      - TRAEFIK_API_INSECURE=true
+    ports:
+      - 8080:8080
+  db:
+    logging:
+      driver: none
+  api:
+    labels:
+      - 'traefik.http.routers.api.rule=Host(`api.political-dashboard.localhost`)'
