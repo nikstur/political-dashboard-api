@@ -1,19 +1,19 @@
-version: '3.7'
 services:
   traefik:
     image: traefik:v2.3
-    command:
-      - '--api.insecure=true'
-      - '--providers.docker'
-      - '--providers.docker.exposedbydefault=false'
-      - '--entrypoints.web.address=:80'
-      - '--entrypoints.web.http.redirections.entryPoint.to=websecure'
-      - '--entrypoints.web.http.redirections.entryPoint.scheme=https'
-      - '--entrypoints.websecure.address=:443'
+    environment:
+      - TRAEFIK_PROVIDERS_DOCKER=true
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+      - TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:80
+      - TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO=websecure
+      - TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME=https
+      - TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS=:443
+    depends_on:
+      - ingester
+      - api
     ports:
       - 80:80
       - 443:443
-      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
   ingester:
@@ -25,8 +25,6 @@ services:
   db:
     image: mongo:4.4
     init: true
-    logging:
-      driver: none
   api:
     build: ./api
     init: true
@@ -35,6 +33,6 @@ services:
       - db
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.api.rule=Host(`api.political-dashboard.localhost`)'
       - 'traefik.http.routers.api.tls=true'
+      - 'traefik.http.routers.api.rule=Host(`api.political-dashboard.localhost`)'
       - 'traefik.http.routers.api.entrypoints=websecure'

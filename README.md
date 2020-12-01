@@ -4,54 +4,48 @@
 
 ## Quick Start
 
-Install Prerequisites.
+Install the prerequisites:
 
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
-Clone the repository.
+Clone the repository
 
-Inside the directory, start all services.
+Inside the directory, build and start all services
 
 ```bash
-docker-compose up --build
+docker-compose -f compose.yml -f compose.dev.yml up --build
 ```
 
-Navigate to `localhost:8000` to see the generated swagger documentation of the API.
+Navigate to `api.political-dashboard.localhost` to see the generated SwaggerUI
+documentation of the API.
 
 ## Development
 
-All commits should be made to the `dev` branch. Afterwards a pull request to the master branch needs to be opened.
+The master branch should always contain a working, deployable
+version of the services.
 
 To develop locally, two development tools need to be installed:
 
 - [pre-commit](https://pre-commit.com/#installation)
 - [poetry](https://python-poetry.org/docs/#installation)
 
-After installing both tools, install the pre-commit hook into the cloned repository from its root directory.
+After installing both tools, install the pre-commit hook into the cloned
+repository from its root directory.
 
 ```bash
 pre-commit install
 ```
 
-`pre-commit` is used to ensure code-quality and to make sure that commits will not fail in `GitHub Actions`. After every commit the tools defined in `.pre-commit-config.yaml` will run over every file (modifying files in-place when necessary) and if any of them fail, the commit will be reversed. After making all tools pass, a commit can be successfully made.
+`pre-commit` is used to ensure quality and reduce merge conflicts. The
+`GitHub Actions` pipeline will run the pre-commit hooks on all files after every
+commit.
 
-Install the dependencies of the `receiver` and `api` service from their respective directories.
+Install the dependencies of the `ingester` and `api` service from their
+respective directories to utilise auto-formatting and linting.
 
 ```bash
 poetry install --no-root
 ```
 
-Poetry will automatically install dependencies into a virtual environment.
-
-To integrate with a running MongoDB instance, a Docker container can be easily spun up.
-
-```bash
-docker run --rm -d --name mongo-dev mongo:4.2.6
-```
-
-Then find its IP address.
-
-```bash
-docker inspect mongo-dev | grep IPAddress
-```
+Poetry will install the dependencies into a virtual environment.

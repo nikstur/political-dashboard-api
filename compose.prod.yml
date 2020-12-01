@@ -1,0 +1,20 @@
+services:
+  traefik:
+    environment:
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_TLSCHALLENGE=true
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_EMAIL=${ACME_EMAIL}
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_STORAGE=/letsencrypt/acme.json
+    volumes:
+      - letsencrypt:/letsencrypt
+    restart: always
+  ingester:
+    restart: always
+  db:
+    restart: always
+  api:
+    labels:
+      - 'traefik.http.routers.api.rule=Host(`api.political-dashboard.com`)'
+      - 'traefik.http.routers.whoami.tls.certresolver=letsencrypt'
+    restart: always
+volumes:
+  letsencrypt:
