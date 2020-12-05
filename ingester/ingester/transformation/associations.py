@@ -1,6 +1,6 @@
 from functools import partial
 
-from .preprocessing import (
+from .main import (
     transform_items_ads_impressions,
     transform_items_counter,
     transform_items_js,
@@ -9,8 +9,6 @@ from .preprocessing import (
     transform_items_subset,
     transform_items_topics,
 )
-
-base_url = "https://political-dashboard.com/json_files/"
 
 facebook = [
     {

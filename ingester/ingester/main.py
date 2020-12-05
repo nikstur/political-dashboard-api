@@ -5,7 +5,8 @@ import aiohttp
 import typer
 
 from .database import database_connection
-from .fetch import endpoints, fetch_all_endpoints
+from .fetch import fetch_and_transform_multiple_endpoints
+from .transformation import associations
 
 app = typer.Typer()
 
@@ -33,10 +34,10 @@ async def read_and_insert_from_files(db_conn) -> None:
 
 async def download_and_insert_from_endpoints(db_conn) -> None:
     async with aiohttp.ClientSession(headers={"Connection": "keep-alive"}) as session:
-        fetch_endpoints = partial(fetch_all_endpoints, session=session)
-        facebook_data = await fetch_endpoints(endpoints.facebook)
-        media_data = await fetch_endpoints(endpoints.media)
-        twitter_data = await fetch_endpoints(endpoints.twitter)
+        fetch = partial(fetch_and_transform_multiple_endpoints, session=session)
+        facebook_data = await fetch(associations.facebook)
+        media_data = await fetch(associations.media)
+        twitter_data = await fetch(associations.twitter)
 
     # The db object is necessary because MongoDB itself has the concept of a database
     # while db_conn is the connection to MonogDB as a DBMS
