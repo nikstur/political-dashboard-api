@@ -10,156 +10,173 @@ from .main import (
     transform_items_topics,
 )
 
-facebook = [
-    {
+associations = {
+    "ads_top10.js": {
         "type": "js",
-        "url": "ads_top10.js",
+        "path": "ads_top10.js",
         "key": "ads_by_advertiser",
+        "collection": "facebook",
         "func": partial(transform_items_js, keys=["advertiser", "count"]),
     },
-    {
+    "ads_impressions.js": {
         "type": "js",
-        "url": "ads_impressions.js",
+        "path": "ads_impressions.js",
         "key": "ads_impressions",
+        "collection": "facebook",
         "func": transform_items_ads_impressions,
     },
-    {
+    "ads_regions.json": {
         "type": "json",
-        "url": "ads_regions.json",
+        "path": "ads_regions.json",
         "key": "ads_regions",
+        "collection": "facebook",
         "func": transform_items_regions,
     },
-    {
+    "counter_ads.json": {
         "type": "json",
-        "url": "counter_ads.json",
+        "path": "counter_ads.json",
         "key": "ads_count",
+        "collection": "facebook",
         "func": transform_items_counter,
     },
-    {
+    "fb_spiderplot.json": {
         "type": "json",
-        "url": "fb_spiderplot.json",
+        "path": "fb_spiderplot.json",
         "key": "reactions",
+        "collection": "facebook",
         "func": transform_items_none,
     },
-    {
+    "fb_sentiment.json": {
         "type": "json",
-        "url": "fb_sentiment.json",
+        "path": "fb_sentiment.json",
         "key": "sentiment",
+        "collection": "facebook",
         "func": transform_items_none,
     },
-    {
+    "fb_posts.json": {
         "type": "json",
-        "url": "fb_posts.json",
+        "path": "fb_posts.json",
         "key": "posts",
+        "collection": "facebook",
         "func": transform_items_subset,
     },
-    {
+    "fb_shares.json": {
         "type": "json",
-        "url": "fb_shares.json",
+        "path": "fb_shares.json",
         "key": "shares",
+        "collection": "facebook",
         "func": transform_items_subset,
     },
-    {
+    "fb_likes.json": {
         "type": "json",
-        "url": "fb_likes.json",
+        "path": "fb_likes.json",
         "key": "likes",
+        "collection": "facebook",
         "func": transform_items_subset,
     },
-]
-
-media = [
-    {
+    "urls.js": {
         "type": "js",
-        "url": "urls_top_facebook.js",
+        "path": "urls.js",
         "key": "urls",
+        "collection": "twitter",
         "func": partial(transform_items_js, keys=["text", "count"]),
     },
-    {
+    "spiderplot.json": {
         "type": "json",
-        "url": "news_party_attention.json",
-        "key": "attention",
-        "func": transform_items_subset,
-    },
-    {
-        "type": "json",
-        "url": "topics_news.json",
-        "key": "topics",
-        "func": transform_items_topics,
-    },
-    {
-        "type": "json",
-        "url": "spiderplot_news.json",
-        "key": "topics_by_media_source",
-        "func": transform_items_none,
-    },
-]
-
-twitter = [
-    {
-        "type": "js",
-        "url": "urls.js",
-        "key": "urls",
-        "func": partial(transform_items_js, keys=["text", "count"]),
-    },
-    {
-        "type": "json",
-        "url": "spiderplot.json",
+        "path": "spiderplot.json",
         "key": "hashtags_by_party",
+        "collection": "twitter",
         "func": transform_items_none,
     },
-    {
+    "hashtags.json": {
         "type": "json",
-        "url": "hashtags.json",
+        "path": "hashtags.json",
         "key": "hashtags",
+        "collection": "twitter",
         "func": transform_items_subset,
     },
-    {
+    "CSU.json": {
         "type": "json",
-        "url": "CSU.json",
+        "path": "CSU.json",
         "key": "hashtags",
+        "collection": "twitter",
         "func": transform_items_subset,
         "party": "CSU",
     },
-    {
+    "SPD.json": {
         "type": "json",
-        "url": "SPD.json",
+        "path": "SPD.json",
         "key": "hashtags",
+        "collection": "twitter",
         "func": transform_items_subset,
         "party": "SPD",
     },
-    {
+    "CDU.json": {
         "type": "json",
-        "url": "CDU.json",
+        "path": "CDU.json",
         "key": "hashtags",
+        "collection": "twitter",
         "func": transform_items_subset,
         "party": "CDU",
     },
-    {
+    "AfD.json": {
         "type": "json",
-        "url": "AfD.json",
+        "path": "AfD.json",
         "key": "hashtags",
+        "collection": "twitter",
         "func": transform_items_subset,
         "party": "AfD",
     },
-    {
+    "FDP.json": {
         "type": "json",
-        "url": "FDP.json",
+        "path": "FDP.json",
         "key": "hashtags",
+        "collection": "twitter",
         "func": transform_items_subset,
         "party": "FDP",
     },
-    {
+    "Gruenen.json": {
         "type": "json",
-        "url": "Gruenen.json",
+        "path": "Gruenen.json",
         "key": "hashtags",
+        "collection": "twitter",
         "func": transform_items_subset,
         "party": "Gruenen",
     },
-    {
+    "Linke.json": {
         "type": "json",
-        "url": "Linke.json",
+        "path": "Linke.json",
         "key": "hashtags",
+        "collection": "twitter",
         "func": transform_items_subset,
         "party": "Linke",
     },
-]
+    "urls_top_facebook.js": {
+        "type": "js",
+        "path": "urls_top_facebook.js",
+        "key": "urls",
+        "collection": "media",
+        "func": partial(transform_items_js, keys=["text", "count"]),
+    },
+    "news_party_attention.json": {
+        "type": "json",
+        "path": "news_party_attention.json",
+        "key": "attention",
+        "collection": "media",
+        "func": transform_items_subset,
+    },
+    "topics_news.json": {
+        "type": "json",
+        "path": "topics_news.json",
+        "key": "topics",
+        "collection": "media",
+        "func": transform_items_topics,
+    },
+    "spiderplot_news.json": {
+        "type": "json",
+        "path": "spiderplot_news.json",
+        "key": "topics_by_media_source",
+        "collection": "media",
+        "func": transform_items_none,
+    },
+}
