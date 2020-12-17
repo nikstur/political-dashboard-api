@@ -3,7 +3,7 @@ import asyncio
 import typer
 
 from .fetch import fetch_transform_ingest_all_endpoints
-from .read import read_transform_ingest_all_files
+from .read import read_transform_ingest_all
 from .transformation import associations
 
 app = typer.Typer()
@@ -11,13 +11,13 @@ app = typer.Typer()
 
 @app.command()
 def initial() -> None:
-    # asyncio.run(read_transform_ingest_all_files(associations))
-    asyncio.run(fetch_transform_ingest_all_endpoints(associations))
+    # asyncio.run(read_transform_ingest_all(associations))
+    asyncio.run(fetch_transform_ingest_all(associations))
 
 
 @app.command()
 def continual() -> None:
-    asyncio.run(fetch_transform_ingest_all_endpoints(associations))
+    asyncio.run(fetch_transform_ingest_all(associations))
 
 
 if __name__ == "__main__":

@@ -11,10 +11,10 @@ from .database import DataBase
 from .transformation import transform
 
 
-async def read_transform_ingest_all_files(assocs: dict, db: DataBase) -> None:
+async def read_transform_ingest_all(assocs: dict, db: DataBase) -> None:
     base_path = Path(os.getenv("BASE_PATH", "/data"))
     coros = [
-        read_transform_ingest_file(file, assocs, db)
+        read_transform_ingest(file, assocs, db)
         for day in base_path.iterdir()
         for file in day.iterdir()
     ]
@@ -22,10 +22,10 @@ async def read_transform_ingest_all_files(assocs: dict, db: DataBase) -> None:
     print(f"Read {len(results)} files")
 
 
-async def read_transform_ingest_file(path: Path, assocs: dict, db: DataBase) -> None:
+async def read_transform_ingest(path: Path, assocs: dict, db: DataBase) -> None:
     filename = "".join(path.name.split("_")[3:])
     assoc = assocs[filename]
-    data = await read_file(path)
+    data = await read(path)
 
     transform_func = assoc["func"]
     key = assoc["key"]
@@ -36,7 +36,7 @@ async def read_transform_ingest_file(path: Path, assocs: dict, db: DataBase) -> 
     await db.insert(collection, transformed_data)
 
 
-async def read_file(path: Path) -> Union[dict, str]:
+async def read(path: Path) -> Union[dict, str]:
     try:
         async with aiofiles.open(path) as f:
             content = await f.read()
