@@ -7,14 +7,14 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 @contextmanager
 def database_connection():
     try:
-        database_connection = DataBaseConnection()
-        database_connection.connect()
-        yield database_connection
+        db = DataBase()
+        db.connect()
+        yield db
     finally:
-        database_connection.disconnect()
+        db.disconnect()
 
 
-class DataBaseConnection:
+class DataBase:
     def connect(self):
         hostname = os.getenv("DB_HOSTNAME", "db")
         self.client = AsyncIOMotorClient(host=hostname)
@@ -24,3 +24,6 @@ class DataBaseConnection:
     def disconnect(self):
         self.client.close()
         print("Disconnected from database")
+
+    async def insert(self, collection: str, doc: dict):
+        await self.db[collection].insert_one(doc)

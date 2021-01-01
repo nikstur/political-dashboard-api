@@ -6,7 +6,10 @@ from .routers import facebook, media, twitter
 
 app = FastAPI(
     title="API for political-dashboard.com",
-    description="REST-API to programmatically access data from political-dashboard.com.",
+    description=(
+        "REST-API to access historical data from political-dashboard.com."
+        " Please report issues at https://github.com/nikstur/political-dashboard-api/issues"
+    ),
     version="0.1.0",
     docs_url="/",
     redoc_url=None,

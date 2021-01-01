@@ -9,6 +9,7 @@ python = "^3.8"
 motor = "^2.3.0"
 aiohttp = {extras = ["speedups"], version = "^3.6.2"}
 typer = "^0.3.2"
+aiofiles = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.1"

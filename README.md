@@ -2,6 +2,10 @@
 
 ![build badge](https://github.com/nikstur/political-dashboard-api/workflows/build/badge.svg)
 
+This application has been developed as part of an internship at the Chair of Political
+Data Science (Technical University of Munich). The project was realized with and
+supervised by Juan Carlos Medina Serrano (@JuanCarlosCSE)
+
 ## Quick Start
 
 Install the prerequisites:
@@ -22,8 +26,7 @@ documentation of the API.
 
 ## Development
 
-The master branch should always contain a working, deployable
-version of the services.
+The master branch should always be in a state that is deployable without further work.
 
 To develop locally, two development tools need to be installed:
 
