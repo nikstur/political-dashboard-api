@@ -1,7 +1,7 @@
 import re
 from ast import literal_eval
 from datetime import datetime
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, List, Optional, Union
 
 
 def transform(
@@ -10,7 +10,7 @@ def transform(
     transformed_items: List[Dict] = transform_items_func(data)
     transformed_data = {
         "key": key,
-        "date": data,
+        "date": date,
         "items": transformed_items,
     }
     return transformed_data
@@ -73,12 +73,18 @@ def parse_js(blob: str) -> List[Dict]:
 def convert_item_ads_impressions(item: Dict) -> Dict:
     converted_item = {
         "advertiser": item["advertiser"],
-        "lower_bound": str_to_int(item["lower bound"]),
-        "upper_bound": str_to_int(item["upper bound"]),
-        "lower_bound_spending": str_to_int(item["lower bound spending (€)"]),
-        "upper_bound_spending": str_to_int(item["lower bound spending (€)"]),
+        "lower_bound": try_get_as_int(item, "lower bound"),
+        "upper_bound": try_get_as_int(item, "upper bound"),
+        "lower_bound_spending": try_get_as_int(item, "lower bound spending (€)"),
+        "upper_bound_spending": try_get_as_int(item, "upper bound spending (€)"),
     }
     return converted_item
+
+
+def try_get_as_int(dictionary: dict, key: str) -> Optional[int]:
+    if item := dictionary.get(key):
+        return str_to_int(item)
+    return None
 
 
 def str_to_int(input: str) -> int:

@@ -16,8 +16,13 @@ async def fetch_transform_ingest_all(assocs: dict) -> None:
                 fetch_transform_ingest(session, assoc, db)
                 for _, assoc in assocs.items()
             ]
-            results = await asyncio.gather(*coros)
-    print(f"Fetched {len(results)} endpoints")
+            results = await asyncio.gather(*coros, return_exceptions=True)
+    successes = [i for i in results if not isinstance(i, Exception)]
+    failures = [i for i in results if isinstance(i, Exception)]
+    print(f"Successfully fetched {len(successes)} file(s)")
+    print(f"Failed to fetch {len(failures)} file(s)")
+    for i, f in enumerate(failures):
+        print(f"Failure {i+1}: {f}")
 
 
 async def fetch_transform_ingest(
@@ -25,15 +30,21 @@ async def fetch_transform_ingest(
 ) -> None:
     base_url = os.getenv("BASE_URL", "https://political-dashboard.com/json_files/")
     url = base_url + assoc["path"]
-    data = await fetch(session, url)
-
-    transform_func = assoc["func"]
-    key = assoc["key"]
-    date = datetime.utcnow()
-    collection = assoc["collection"]
-
-    transformed_data = transform(data, transform_func, key, date)
-    await db.insert(collection, transformed_data)
+    try:
+        data = await fetch(session, url)
+    except Exception as e:
+        raise Exception(f"Could not fetch file: {url} with Exception {e}")
+    else:
+        transform_func = assoc["func"]
+        key = assoc["key"]
+        date = datetime.utcnow()
+        collection = assoc["collection"]
+        try:
+            transformed_data = transform(data, transform_func, key, date)
+        except Exception as e:
+            raise Exception(f"Failed to transform data from {url} with Exception {e}")
+        else:
+            await db.insert(collection, transformed_data)
 
 
 async def fetch(session: ClientSession, url: str) -> Union[dict, str]:

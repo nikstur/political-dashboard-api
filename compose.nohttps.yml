@@ -4,10 +4,6 @@ services:
     environment:
       - TRAEFIK_PROVIDERS_DOCKER=true
       - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
-      - TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:80
-      - TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO=websecure
-      - TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME=https
-      - TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS=:443
     depends_on:
       - ingester
       - api
@@ -34,5 +30,4 @@ services:
       - db
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.api.tls=true'
-      - 'traefik.http.routers.api.entrypoints=websecure'
+      - 'traefik.tcp.routers.api.rule=HostSNI(`*`)'

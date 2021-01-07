@@ -2,6 +2,7 @@
 test_data/
 debug*
 .python-version
+data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
