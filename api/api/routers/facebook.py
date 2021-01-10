@@ -29,6 +29,7 @@ async def facebook(
     db: DataBase = Depends(db_conn),
     time_filter: Dict = Depends(time_query),
 ):
+    """Data from all /facebook/* endpoints"""
     return await db.find(collection, {}, time_filter)
 
 
@@ -43,9 +44,7 @@ async def facebook(
         ]
     ],
 )
-async def facebook_ads(
-    db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
-):
+async def ads(db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)):
     keys_ads = ["ads_by_advertiser", "ads_impressions", "ads_regions", "ads_count"]
     return await db.find(collection, {"key": {"$in": keys_ads}}, time_filter)
 
@@ -53,7 +52,7 @@ async def facebook_ads(
 @router.get(
     "/ads/by_advertiser", response_model=List[models.FacebookAdsByAdvertiserResponse]
 )
-async def facebook_ads_by_advertiser(
+async def ads_by_advertiser(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "ads_by_advertiser"}, time_filter)
@@ -62,21 +61,21 @@ async def facebook_ads_by_advertiser(
 @router.get(
     "/ads/impressions", response_model=List[models.FacebookAdsImpressionsResponse]
 )
-async def facebook_ads_impressions(
+async def ads_impressions(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "ads_impressions"}, time_filter)
 
 
 @router.get("/ads/regions", response_model=List[models.FacebookAdsRegionsResponse])
-async def facebook_ads_regions(
+async def ads_regions(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "ads_regions"}, time_filter)
 
 
 @router.get("/ads/count", response_model=List[models.FacebookAdsCountResponse])
-async def facebook_ads_count(
+async def ads_count(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "ads_count"}, time_filter)
@@ -86,7 +85,7 @@ async def facebook_ads_count(
     "/reactions",
     response_model=List[models.FacebookReactionsReponse],
 )
-async def facebook_reactions(
+async def reactions(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "reactions"}, time_filter)
@@ -96,7 +95,7 @@ async def facebook_reactions(
     "/sentiment",
     response_model=List[models.FacebookSentimentResponse],
 )
-async def facebook_sentiment(
+async def sentiment(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "sentiment"}, time_filter)
@@ -106,7 +105,7 @@ async def facebook_sentiment(
     "/posts",
     response_model=List[models.SimpleFacebookResponse],
 )
-async def facebook_posts(
+async def posts(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "posts"}, time_filter)
@@ -116,7 +115,7 @@ async def facebook_posts(
     "/shares",
     response_model=List[models.SimpleFacebookResponse],
 )
-async def facebook_shares(
+async def shares(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "shares"}, time_filter)
@@ -126,7 +125,7 @@ async def facebook_shares(
     "/likes",
     response_model=List[models.SimpleFacebookResponse],
 )
-async def facebook_likes(
+async def likes(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
     return await db.find(collection, {"key": "likes"}, time_filter)

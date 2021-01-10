@@ -29,7 +29,7 @@ class FacebookAdsByAdvertiserResponseBody(BaseModel):
 
 
 class FacebookAdsByAdvertiserResponse(BaseResponse):
-    key: str = Field("ads", example="ads")
+    key: str = Field("ads_by_advertiser", example="ads_by_advertiser")
     items: List[FacebookAdsByAdvertiserResponseBody]
 
 
