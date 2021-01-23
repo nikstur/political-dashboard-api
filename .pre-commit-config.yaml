@@ -49,6 +49,7 @@ repos:
       - id: mypy
         name: Type Check Api
         files: '^api/.*\.py'
+        args: ['--config-file', 'api/mypy.ini']
         additional_dependencies:
           [
             'motor==2.3.0',
@@ -59,5 +60,6 @@ repos:
       - id: mypy
         name: Type Check Ingester
         files: '^ingester/.*\.py'
+        args: ['--config-file', 'ingester/mypy.ini']
         additional_dependencies:
           ['aiohttp==3.6.2', 'typer==0.3.2', 'aiofiles==0.6.0']
