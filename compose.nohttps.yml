@@ -12,6 +12,7 @@ services:
       - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
   ingester:
     build: ./ingester
     init: true
@@ -22,6 +23,7 @@ services:
       - ./data:/data
   db:
     image: mongo:4.4
+    restart: always
   api:
     build: ./api
     init: true
@@ -31,3 +33,4 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.tcp.routers.api.rule=HostSNI(`*`)'
+    restart: always
