@@ -7,9 +7,11 @@ from motor.motor_asyncio import (
     AsyncIOMotorCursor,
     AsyncIOMotorDatabase,
 )
+from tenacity import retry, wait_random_exponential
 
 
 class DataBaseConnection:
+    @retry(wait=wait_random_exponential(multiplier=1, max=60))
     def connect(self) -> None:
         hostname = os.getenv("DB_HOSTNAME", "db")
         self.client = AsyncIOMotorClient(host=hostname)

@@ -10,6 +10,7 @@ motor = "^2.3.0"
 uvicorn = "^0.13.3"
 fastapi = "^0.63.0"
 orjson = "^3.4.6"
+tenacity = "^6.3.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.1"
