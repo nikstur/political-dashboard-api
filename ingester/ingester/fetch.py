@@ -39,8 +39,9 @@ async def fetch_transform_ingest(
         key = assoc["key"]
         date = datetime.utcnow()
         collection = assoc["collection"]
+        party = assoc.get("party")
         try:
-            transformed_data = transform(data, transform_func, key, date)
+            transformed_data = transform(data, transform_func, key, date, party)
         except Exception as e:
             raise Exception(f"Failed to transform data from {url} with Exception {e}")
         else:

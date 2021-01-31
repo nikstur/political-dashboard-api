@@ -44,8 +44,9 @@ async def read_transform_ingest(path: Path, assocs: dict, db: DataBase) -> None:
         key = assoc["key"]
         date = assemble_date_from_path(path)
         collection = assoc["collection"]
+        party = assoc.get("party")
         try:
-            transformed_data = transform(data, transform_func, key, date)
+            transformed_data = transform(data, transform_func, key, date, party)
         except Exception as e:
             raise Exception(f"Failed to transform data from {path} with Exception {e}")
         else:

@@ -5,7 +5,11 @@ from typing import Callable, Dict, List, Optional, Union
 
 
 def transform(
-    data: Union[Dict, str], transform_items_func: Callable, key: str, date: datetime
+    data: Union[Dict, str],
+    transform_items_func: Callable,
+    key: str,
+    date: datetime,
+    party: Optional[str],
 ) -> Dict:
     transformed_items: List[Dict] = transform_items_func(data)
     transformed_data = {
@@ -13,6 +17,9 @@ def transform(
         "date": date,
         "items": transformed_items,
     }
+    if party:
+        print(party)
+        transformed_data.update({"party": party})
     return transformed_data
 
 

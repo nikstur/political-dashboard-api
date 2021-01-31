@@ -60,8 +60,10 @@ async def hashtags(
     A supporter of a party is someone who has retweeted posts from this
     party at least 5 times. A user can be a supporter of multiple parties.
     """
-    party_filter = {"party": party}
-    return await db.find(collection, {"key": "hashtags"}, time_query, party_filter)
+    filters = {"key": "hashtags"}
+    if party:
+        filters.update({"party": party})
+    return await db.find(collection, filters, time_query)
 
 
 @router.get(
