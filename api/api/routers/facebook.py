@@ -29,7 +29,7 @@ async def facebook(
     db: DataBase = Depends(db_conn),
     time_filter: Dict = Depends(time_query),
 ):
-    """Data from all /facebook/* endpoints"""
+    """Data from all /facebook/* endpoints."""
     return await db.find(collection, {}, time_filter)
 
 
@@ -45,6 +45,7 @@ async def facebook(
     ],
 )
 async def ads(db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)):
+    """Data from all /facebook/ads/* endpoints."""
     keys_ads = ["ads_by_advertiser", "ads_impressions", "ads_regions", "ads_count"]
     return await db.find(collection, {"key": {"$in": keys_ads}}, time_filter)
 
@@ -55,6 +56,7 @@ async def ads(db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_
 async def ads_by_advertiser(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
+    """Number of ads published by single advertisers."""
     return await db.find(collection, {"key": "ads_by_advertiser"}, time_filter)
 
 
@@ -64,6 +66,7 @@ async def ads_by_advertiser(
 async def ads_impressions(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
+    """Effectiveness of ads measured by their impressions."""
     return await db.find(collection, {"key": "ads_impressions"}, time_filter)
 
 
@@ -71,6 +74,7 @@ async def ads_impressions(
 async def ads_regions(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
+    """Published political ads per region (federal state)."""
     return await db.find(collection, {"key": "ads_regions"}, time_filter)
 
 
@@ -78,6 +82,7 @@ async def ads_regions(
 async def ads_count(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
+    """Number of political ads currently active on Facebook."""
     return await db.find(collection, {"key": "ads_count"}, time_filter)
 
 
@@ -88,6 +93,7 @@ async def ads_count(
 async def reactions(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
+    """Reactions to the pages of each political party."""
     return await db.find(collection, {"key": "reactions"}, time_filter)
 
 
@@ -98,6 +104,7 @@ async def reactions(
 async def sentiment(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
+    """Sentiment of each party's posts."""
     return await db.find(collection, {"key": "sentiment"}, time_filter)
 
 
@@ -108,6 +115,7 @@ async def sentiment(
 async def posts(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
+    """Number of posts of each party page."""
     return await db.find(collection, {"key": "posts"}, time_filter)
 
 
@@ -118,6 +126,7 @@ async def posts(
 async def shares(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
+    """Number shares for each party."""
     return await db.find(collection, {"key": "shares"}, time_filter)
 
 
@@ -128,4 +137,5 @@ async def shares(
 async def likes(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
+    """Number of likes for each party"""
     return await db.find(collection, {"key": "likes"}, time_filter)

@@ -25,7 +25,7 @@ collection = "twitter"
 async def twitter(
     db: DataBase = Depends(db_conn), time_query: Dict = Depends(time_query)
 ):
-    """Data from all /twitter/* endpoints"""
+    """Data from all /twitter/* endpoints."""
     return await db.find(collection, {}, time_query)
 
 

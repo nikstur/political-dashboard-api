@@ -25,7 +25,7 @@ collection = "media"
 async def media(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
-    """Data from all /media/* endpoints"""
+    """Data from all /media/* endpoints."""
     return await db.find(collection, {}, time_filter)
 
 
@@ -41,7 +41,7 @@ async def urls(
 async def attention(
     db: DataBase = Depends(db_conn), time_filter: Dict = Depends(time_query)
 ):
-    """Number of times the names of parties are mentioned in articles"""
+    """Number of times the names of parties are mentioned in articles."""
     return await db.find(collection, {"key": "attention"}, time_filter)
 
 
