@@ -10,25 +10,36 @@ from .database import DataBase, database_connection
 
 
 async def time_query(
-    start_date: date = Query(date.today(), description="Start date in UTC (ISO 8601)"),
-    end_date: date = Query(date.today(), description="End date in UTC (ISO 8601)"),
+    start_date: date = Query(
+        None, description="Start date in UTC (ISO 8601)", example="2021-01-31"
+    ),
+    end_date: date = Query(
+        None, description="End date in UTC (ISO 8601)", example="2021-01-31"
+    ),
 ) -> Optional[dict]:
-    if not start_date or not end_date:
-        raise HTTPException(status_code=403, detail="Time span MUST be provided.")
-    elif (end_date - date.today()) >= timedelta(days=1):
+    if not start_date:
+        start_date = date.today()
+    if not end_date:
+        end_date = date.today()
+
+    if _check_not_future(start_date) or _check_not_future(end_date):
         raise HTTPException(status_code=418, detail="The future cannot be queried.")
+
+    # Add day to end_date so that data before 00h of the next day is retrieved
+    end_date += timedelta(days=1)
+    time_delta = end_date - start_date
+    if time_delta.days <= 10:
+        time_filter = _construct_filter_from_date(start_date, end_date)
+        return time_filter
     else:
-        # Add day to end_date so that data before 00h of the next day is retrieved
-        end_date += timedelta(days=1)
-        time_delta = end_date - start_date
-        if time_delta.days <= 10:
-            time_filter = _construct_filter_from_date(start_date, end_date)
-            return time_filter
-        else:
-            raise HTTPException(
-                status_code=403,
-                detail="Invalid time span. Maximum is 10 days.",
-            )
+        raise HTTPException(
+            status_code=403,
+            detail="Invalid time span. Maximum is 10 days.",
+        )
+
+
+def _check_not_future(date_to_check):
+    return (date_to_check - date.today()) >= timedelta(days=1)
 
 
 def _construct_filter_from_date(start_date: date, end_date: date) -> dict:
