@@ -19,19 +19,6 @@ async def test_time_query_acceptable_input():
 time_query_exceptional_test_data = [
     (
         date(2020, 6, 7),
-        None,
-        pytest.raises(HTTPException),
-        "Time span MUST be provided",
-    ),
-    (
-        None,
-        date(2020, 6, 8),
-        pytest.raises(HTTPException),
-        "Time span MUST be provided",
-    ),
-    (None, None, pytest.raises(HTTPException), "Time span MUST be provided"),
-    (
-        date(2020, 6, 7),
         date(2020, 6, 17),
         pytest.raises(HTTPException),
         "Invalid time span. Maximum is 10 days.",
