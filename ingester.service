@@ -2,5 +2,4 @@
 Description=Ingester service for political-dashboard-api
 
 [Service]
-Type=oneshot
-ExecStart=/bin/sh -c "docker run --network political-dashboard-api_default political-dashboard-api_ingester continual"
+ExecStart=/usr/bin/docker run --network political-dashboard-api_default political-dashboard-api_ingester continual

@@ -2,8 +2,7 @@
 Description=Run ingester service daily
 
 [Timer]
-OnCalendar=*-*-* 4:00:00
-Persistent=true
+OnCalendar=*-*-* 06:00:00
 
 [Install]
 WantedBy=timers.target
